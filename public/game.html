@@ -49,10 +49,36 @@
     .brand-row {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
       width: min(100%, 1120px);
       min-height: 150px;
       margin: 0 auto;
       padding: 24px;
+    }
+
+    .site-navigation {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .site-navigation a {
+      padding: 8px 12px;
+      border: 1px solid rgb(255 255 255 / 18%);
+      border-radius: 8px;
+      color: #e5e7eb;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .site-navigation a:hover,
+    .site-navigation a[aria-current="page"] {
+      border-color: #a100ff;
+      background: rgb(161 0 255 / 14%);
+      color: #fff;
     }
 
     .brand {
@@ -415,7 +441,9 @@
       :root { --cell-size: min(4vw, 24px); }
       .assessment-header { min-height: 156px; }
       .header-notice { min-height: 42px; font-size: 10px; }
-      .brand-row { min-height: 114px; padding: 20px; }
+      .brand-row { min-height: 114px; padding: 20px 14px; }
+      .site-navigation { gap: 6px; }
+      .site-navigation a { padding: 7px 9px; font-size: 12px; }
       main { padding: 12px 8px 24px; }
       .question-bar { margin-bottom: 14px; }
       .game-layout { max-width: calc(100% - 40px); }
@@ -443,6 +471,10 @@
     <div class="header-notice">Accenture Path Game · assessment practice replica · no recording is active</div>
     <div class="brand-row">
       <div class="brand" aria-label="Accenture">accenture<span class="brand-mark" aria-hidden="true">&gt;</span></div>
+      <nav class="site-navigation" aria-label="Game navigation">
+        <a href="game.html" aria-current="page">Arrow Games</a>
+        <a href="bubble.html">Bubble Game</a>
+      </nav>
     </div>
   </header>
   <main>
