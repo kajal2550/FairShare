@@ -140,6 +140,7 @@
     }
 
     .game-layout {
+      position: relative;
       display: grid;
       grid-template-columns: max-content max-content max-content;
       grid-template-rows: repeat(var(--grid-size, 12), minmax(0, var(--cell-size)));
@@ -191,6 +192,16 @@
     .target .marker-label { background: #ea580c; }
     .marker-arrow { color: #ea580c; font-size: 18px; }
 
+    .rocket-runner {
+      position: absolute;
+      z-index: 2;
+      width: 28px;
+      height: 28px;
+      overflow: visible;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 2px rgb(0 0 0 / 28%));
+    }
+
     .board-shell {
       width: max-content;
       overflow: hidden;
@@ -225,6 +236,13 @@
     .cell.dark:hover { background: #686868; }
     .cell.selected.dark { box-shadow: inset 0 0 0 2px var(--accent); }
     .cell.selected.dark:hover { background: #686868; }
+    .cell.dark.path-revealed,
+    .cell.selected.dark.path-revealed,
+    .cell.dark.path-revealed:hover,
+    .cell.selected.dark.path-revealed:hover {
+      background: #2563eb !important;
+      box-shadow: inset 0 0 0 3px #1d4ed8 !important;
+    }
     .cell.block-right { border-right: 3px solid var(--block-line); }
     .cell.block-bottom { border-bottom: 3px solid var(--block-line); }
     .cell.start-cell { border-left: 2px solid #16a34a; }
@@ -287,8 +305,9 @@
     .control-button {
       display: grid;
       place-items: center;
-      width: 48px;
-      height: 48px;
+      width: 58px;
+      height: 56px;
+      gap: 3px;
       border: 0;
       border-radius: 10px;
       background: #303030;
@@ -301,7 +320,8 @@
     .control-button:hover { background: #4b4b4b; transform: translateY(-1px); }
     .control-button:active { transform: translateY(0); }
     .control-button:focus-visible, .cell:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
-    .control-button svg { width: 22px; height: 22px; }
+    .control-button svg { width: 20px; height: 20px; }
+    .control-button span { font-size: 9px; line-height: 1; }
 
     .status {
       min-height: 24px;
@@ -311,9 +331,80 @@
       text-align: center;
     }
 
+    .moves-count {
+      margin: 12px 0 0;
+      color: #52525b;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+
     .status.success { color: #15803d; font-weight: 700; }
     .status.error { color: #b91c1c; }
     .board.shake { animation: shake .35s ease-in-out; }
+
+    .victory-overlay {
+      display: grid;
+      place-items: center;
+      grid-column: 4;
+      grid-row: 1 / -1;
+      align-self: center;
+      width: min(290px, 28vw);
+      padding: 10px;
+    }
+
+    .victory-overlay[hidden] { display: none; }
+
+    .victory-dialog {
+      width: 100%;
+      padding: 24px 18px;
+      border: 1px solid #e4e4e7;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+      text-align: center;
+    }
+
+    .victory-check {
+      display: grid;
+      place-items: center;
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: #dcfce7;
+      color: #16a34a;
+      font-size: 42px;
+      font-weight: 700;
+    }
+
+    .victory-dialog h2 {
+      margin: 0;
+      color: #27272a;
+      font-size: clamp(22px, 5vw, 28px);
+      font-weight: 500;
+    }
+
+    .victory-dialog p {
+      margin: 14px 0 24px;
+      color: #71717a;
+      font-size: 16px;
+    }
+
+    .victory-continue {
+      min-width: 128px;
+      padding: 12px 22px;
+      border: 0;
+      border-radius: 12px;
+      background: #f97316;
+      color: #fff;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .victory-continue:hover { background: #ea580c; }
+    .victory-continue:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
 
     @keyframes shake {
       20%, 60% { transform: translateX(-5px); }
@@ -328,11 +419,18 @@
       main { padding: 12px 8px 24px; }
       .question-bar { margin-bottom: 14px; }
       .game-layout { max-width: calc(100% - 40px); }
+      .victory-overlay {
+        grid-column: 1 / -1;
+        grid-row: auto;
+        justify-self: center;
+        width: min(290px, calc(100vw - 24px));
+        padding: 10px 0;
+      }
       .marker { gap: 2px; }
       .marker-label { display: none; }
       .marker-arrow { font-size: 15px; }
-      .controls { gap: 8px; }
-      .control-button { width: 43px; height: 43px; }
+      .controls { gap: 5px; }
+      .control-button { width: 50px; height: 48px; gap: 2px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -368,6 +466,19 @@
         <span class="marker-arrow" aria-hidden="true">➜</span>
         <span class="marker-label">TARGET</span>
       </div>
+      <svg class="rocket-runner" id="rocketRunner" viewBox="0 0 32 32" aria-hidden="true">
+        <path d="M16 2c5.5 3.7 8.2 9.4 7.5 16.2L16 25l-7.5-6.8C7.8 11.4 10.5 5.7 16 2Z" fill="#6d28d9" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="16" cy="12" r="2.6" fill="#bfdbfe"/>
+        <path d="m9 16-4 3v5l5-2m13-6 4 3v5l-5-2M13 24l-1 5 4-2 4 2-1-5" fill="#f97316" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/>
+      </svg>
+      <div class="victory-overlay" id="victoryOverlay" hidden>
+        <section class="victory-dialog" role="dialog" aria-labelledby="victoryTitle" aria-describedby="victorySummary">
+          <div class="victory-check" aria-hidden="true">✓</div>
+          <h2 id="victoryTitle">Great! You found the path</h2>
+          <p id="victorySummary">Solved in 0 moves.</p>
+          <button class="victory-continue" id="continueButton" type="button">Continue</button>
+        </section>
+      </div>
     </section>
 
     <div class="controls" aria-label="Game controls">
@@ -380,25 +491,30 @@
       </div>
       <button class="control-button" id="rotateButton" type="button" title="Rotate selected block (R)" aria-label="Rotate selected block">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path>
+          <path d="M3 8a9 9 0 1 0 2.7-6.3L3 8"></path><path d="M3 3v5h5"></path>
         </svg>
+        <span aria-hidden="true">Rotate ↶</span>
       </button>
       <button class="control-button" id="flipButton" type="button" title="Flip selected block (F)" aria-label="Flip selected block">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="m17 2 4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="m7 22-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path>
         </svg>
+        <span aria-hidden="true">Flip</span>
       </button>
       <button class="control-button" id="submitButton" type="button" title="Submit path (Enter)" aria-label="Submit path">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M20 6 9 17l-5-5"></path>
         </svg>
+        <span aria-hidden="true">Submit</span>
       </button>
       <button class="control-button" id="resetButton" type="button" title="Reset puzzle" aria-label="Reset puzzle">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path>
         </svg>
+        <span aria-hidden="true">Reset</span>
       </button>
     </div>
+    <p class="moves-count" id="movesCount" aria-live="polite">Moves: 0</p>
     <p class="status" id="status" role="status" aria-live="polite">Select any cell in a 3×3 block to highlight it.</p>
   </main>
 
@@ -421,10 +537,10 @@
             "4,1": "up", "4,4": "upleft", "4,5": "left", "4,6": "right", "4,7": "upright",
             "4,9": "right", "4,10": "right", "4,11": "right",
             "5,1": "up",
-            "6,1": "down", "6,7": "up",
-            "7,0": "left", "7,1": "downright", "7,3": "right", "7,4": "right", "7,5": "right",
+            "6,7": "up",
+            "7,0": "right", "7,1": "downright", "7,3": "right", "7,4": "right", "7,5": "right",
             "7,7": "up", "7,9": "right", "7,10": "right", "7,11": "right",
-            "8,7": "up",
+            "8,1": "down", "8,7": "up",
             "9,1": "down",
             "10,1": "downright", "10,2": "right", "10,3": "right", "10,4": "right", "10,5": "right",
             "10,7": "downleft", "10,8": "left", "10,9": "right", "10,10": "right", "10,11": "right",
@@ -442,7 +558,6 @@
             "1,6": "right", "1,7": "right", "1,8": "right",
             "1,9": "right", "1,10": "right", "1,11": "right",
             "1,12": "right", "1,13": "right", "1,14": "right",
-            "2,1": "down",
             "3,1": "up",
             "4,1": "upleft", "4,2": "left",
             "4,3": "right", "4,4": "right", "4,5": "right",
@@ -450,9 +565,8 @@
             "4,12": "right", "4,13": "right", "4,14": "right",
             "7,0": "right", "7,1": "downright", "8,1": "down",
             "7,3": "right", "7,4": "right", "7,5": "right",
-            "6,10": "up",
+            "7,9": "right", "7,10": "right", "7,11": "right",
             "7,6": "left", "7,7": "left", "7,8": "left",
-            "7,9": "right", "7,10": "upright",
             "7,12": "right", "7,13": "downright", "8,13": "down",
             "10,1": "upright", "10,2": "right",
             "10,3": "right", "10,4": "right", "10,5": "right",
@@ -471,7 +585,7 @@
             "13,14": "right",
             "5,7": "down", "5,10": "up"
           },
-          blankDark: ["0,7", "2,7", "4,0", "5,1", "3,4", "5,4", "6,7", "8,7", "7,11", "8,10", "10,0", "12,1", "14,1"]
+          blankDark: ["0,7", "2,7", "2,1", "3,4", "4,0", "5,1", "5,4", "6,7", "6,10", "8,7", "8,10", "10,0", "12,1", "14,1"]
         },
         4: {
           gridSize: 18,
@@ -525,13 +639,13 @@
       let currentLevel = 2;
       let START = LEVELS[currentLevel].start;
       let TARGET = LEVELS[currentLevel].target;
-      const ROTATE = {
-        right: "down", down: "left", left: "up", up: "right",
-        downright: "downleft", downleft: "upleft", upleft: "upright", upright: "downright"
-      };
-      const FLIP = {
+      const OPPOSITE_DIRECTIONS = {
         right: "left", left: "right", up: "down", down: "up",
-        downright: "upleft", upleft: "downright", upright: "downleft", downleft: "upright"
+        downright: "upleft", upleft: "downright", downleft: "upright", upright: "downleft"
+      };
+      const ROTATE_COUNTERCLOCKWISE = {
+        right: "up", up: "left", left: "down", down: "right",
+        downright: "upright", upright: "upleft", upleft: "downleft", downleft: "downright"
       };
       const DIRECTIONS = {
         right: [0, 1], left: [0, -1], up: [-1, 0], down: [1, 0]
@@ -548,18 +662,32 @@
       };
       const board = document.getElementById("board");
       const boardShell = document.getElementById("boardShell");
+      const gameLayout = document.querySelector(".game-layout");
+      const rocketRunner = document.getElementById("rocketRunner");
       const status = document.getElementById("status");
       const timer = document.getElementById("timer");
       const timerText = document.getElementById("timerText");
       const timerProgress = document.getElementById("timerProgress");
+      const movesCount = document.getElementById("movesCount");
+      const victoryOverlay = document.getElementById("victoryOverlay");
+      const victorySummary = document.getElementById("victorySummary");
       let blocks = [];
       let selectedBlock = "2,0";
       let secondsLeft = TIME_LIMIT;
+      let moves = 0;
       let timerId = null;
       let finished = false;
+      let pathSolved = false;
+      let rocketAnimation = null;
+      let pathRevealTimerId = null;
 
       function currentPuzzle() {
         return LEVELS[currentLevel];
+      }
+
+      function countMove() {
+        moves++;
+        movesCount.textContent = `Moves: ${moves}`;
       }
 
       function makeInitialBlocks() {
@@ -615,7 +743,6 @@
         const size = currentPuzzle().gridSize;
         board.style.setProperty("--grid-size", size);
         board.setAttribute("aria-label", `${size} by ${size} arrow puzzle`);
-        const gameLayout = document.querySelector(".game-layout");
         gameLayout.style.setProperty("--grid-size", size);
         gameLayout.style.setProperty("--start-row", START.row + 1);
         gameLayout.style.setProperty("--target-row", TARGET.row + 1);
@@ -632,6 +759,8 @@
             const button = document.createElement("button");
             button.type = "button";
             button.className = "cell";
+            button.dataset.row = String(row);
+            button.dataset.col = String(col);
             button.setAttribute("role", "gridcell");
             button.setAttribute("aria-label", cell?.arrow ? `Row ${row + 1}, column ${col + 1}, ${cell.arrow} arrow` : `Row ${row + 1}, column ${col + 1}`);
 
@@ -648,6 +777,7 @@
             if (cell?.arrow) button.append(createArrow(cell.arrow));
             button.addEventListener("click", () => {
               if (finished) return;
+              clearSolvedPathFeedback();
               selectedBlock = `${Math.floor(row / 3)},${Math.floor(col / 3)}`;
               showStatus(`Block ${Number(selectedBlock.split(",")[0]) + 1}×${Number(selectedBlock.split(",")[1]) + 1} selected.`);
               render();
@@ -663,18 +793,68 @@
         const [blockRow, blockCol] = selectedBlock.split(",").map(Number);
         const block = blocks.find(item => item.blockRow === blockRow && item.blockCol === blockCol);
         if (!block) return;
+        clearSolvedPathFeedback();
+        delete block.directionCycle;
+        const cellsToAnimate = block.cells.map(cell => {
+          const localRow = cell.row - blockRow * 3;
+          const localCol = cell.col - blockCol * 3;
+          return {
+            fromRow: cell.row,
+            fromCol: cell.col,
+            toRow: blockRow * 3 + 2 - localCol,
+            toCol: blockCol * 3 + localRow
+          };
+        });
+        const startingRects = cellsToAnimate.map(({ fromRow, fromCol }) => {
+          const element = board.querySelector(`[data-row="${fromRow}"][data-col="${fromCol}"]`);
+          return element?.getBoundingClientRect() ?? null;
+        });
         block.cells = block.cells.map(cell => {
           const localRow = cell.row - blockRow * 3;
           const localCol = cell.col - blockCol * 3;
           return {
             ...cell,
-            row: blockRow * 3 + localCol,
-            col: blockCol * 3 + 2 - localRow,
-            arrow: cell.arrow ? ROTATE[cell.arrow] : null
+            row: blockRow * 3 + 2 - localCol,
+            col: blockCol * 3 + localRow,
+            arrow: cell.arrow ? ROTATE_COUNTERCLOCKWISE[cell.arrow] : null
           };
         });
-        showStatus("Selected block rotated clockwise.");
+        const rotatedGrayCells = block.cells.filter(cell => cell.isDark);
+        const rotatedArrows = block.cells.filter(cell => cell.arrow);
+        if (rotatedGrayCells.length === 4 && rotatedArrows.length === 3) {
+          const arrowColumn = rotatedArrows[0].col;
+          const arrowRows = rotatedArrows.map(cell => cell.row).sort((a, b) => a - b);
+          if (
+            rotatedArrows.every(cell => cell.col === arrowColumn) &&
+            arrowRows[2] - arrowRows[0] === 2
+          ) {
+            block.cells = block.cells.map(cell => ({
+              ...cell,
+              arrow: cell.arrow ? "down" : null
+            }));
+          }
+        }
+        countMove();
+        showStatus("Selected block and its arrows rotated 90 degrees counter-clockwise.");
         render();
+        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          const elementsToAnimate = cellsToAnimate.map(({ toRow, toCol }, index) => {
+            const element = board.querySelector(`[data-row="${toRow}"][data-col="${toCol}"]`);
+            const from = startingRects[index];
+            const to = element?.getBoundingClientRect();
+            if (!element || !from || !to) return null;
+            element.style.transition = "none";
+            element.style.transform =
+              `translate(${from.left - to.left}px, ${from.top - to.top}px) rotate(-90deg)`;
+            return element;
+          }).filter(Boolean);
+          window.requestAnimationFrame(() => {
+            for (const element of elementsToAnimate) {
+              element.style.transition = "transform 360ms ease-in-out";
+              element.style.transform = "";
+            }
+          });
+        }
       }
 
       function flipSelectedBlock() {
@@ -682,11 +862,173 @@
         const [blockRow, blockCol] = selectedBlock.split(",").map(Number);
         const block = blocks.find(item => item.blockRow === blockRow && item.blockCol === blockCol);
         if (!block) return;
+        clearSolvedPathFeedback();
+        const grayCellPositions = new Set(block.cells
+          .filter(cell => cell.isDark)
+          .map(cell => `${cell.row - blockRow * 3},${cell.col - blockCol * 3}`));
+        const isFiveCellCross = grayCellPositions.size === 5 &&
+          ["0,1", "1,0", "1,1", "1,2", "2,1"].every(position => grayCellPositions.has(position));
+        if (grayCellPositions.size === 4 && !isFiveCellCross) {
+          if (!block.directionCycle) {
+            const originalArrows = block.cells
+              .filter(cell => cell.arrow)
+              .map(cell => ({
+                row: cell.row,
+                col: cell.col,
+                direction: cell.arrow
+              }));
+            const arrowPositions = new Set(originalArrows.map(arrow => `${arrow.row},${arrow.col}`));
+            const grayCells = block.cells.filter(cell => cell.isDark);
+            const straightLines = new Map();
+            for (const cell of grayCells) {
+              const rowLine = grayCells.filter(other => other.row === cell.row);
+              if (rowLine.length === 3) straightLines.set(`row-${cell.row}`, rowLine);
+              const colLine = grayCells.filter(other => other.col === cell.col);
+              if (colLine.length === 3) straightLines.set(`col-${cell.col}`, colLine);
+            }
+            const straightLine = [...straightLines.values()].sort((first, second) =>
+              second.filter(cell => arrowPositions.has(`${cell.row},${cell.col}`)).length -
+              first.filter(cell => arrowPositions.has(`${cell.row},${cell.col}`)).length
+            )[0];
+            const directionByVector = {
+              "0,1": "right", "0,-1": "left", "-1,0": "up", "1,0": "down",
+              "1,1": "downright", "-1,-1": "upleft",
+              "1,-1": "downleft", "-1,1": "upright"
+            };
+            let mixedLayouts = null;
+            const threeCellLine = [...straightLines.values()].find(line => line.length === 3);
+            if (threeCellLine) {
+              const remainingCell = grayCells.find(cell => !threeCellLine.includes(cell));
+              const isHorizontal = threeCellLine.every(cell => cell.row === threeCellLine[0].row);
+              const orderedLine = [...threeCellLine].sort((first, second) =>
+                isHorizontal ? first.col - second.col : first.row - second.row
+              );
+              const centerCell = orderedLine[1];
+              const u = isHorizontal ? { row: 0, col: 1 } : { row: 1, col: 0 };
+              const v = {
+                row: remainingCell.row - centerCell.row,
+                col: remainingCell.col - centerCell.col
+              };
+              const formsT = Math.abs(v.row) + Math.abs(v.col) === 1 &&
+                u.row * v.row + u.col * v.col === 0;
+              if (formsT) {
+                const makeLayout = entries => entries.map(([localRow, localCol, direction]) => {
+                  const directionVectors = {
+                    right: { row: 0, col: 1 },
+                    downright: { row: 1, col: 1 },
+                    down: { row: 1, col: 0 },
+                    upright: { row: -1, col: 1 },
+                    up: { row: -1, col: 0 }
+                  };
+                  const vector = directionVectors[direction];
+                  const actualVector = {
+                    row: vector.col * u.row + vector.row * v.row,
+                    col: vector.col * u.col + vector.row * v.col
+                  };
+                  return {
+                    row: centerCell.row + (localCol - 1) * u.row + (localRow - 1) * v.row,
+                    col: centerCell.col + (localCol - 1) * u.col + (localRow - 1) * v.col,
+                    direction: directionByVector[`${actualVector.row},${actualVector.col}`]
+                  };
+                });
+                mixedLayouts = [
+                  makeLayout([[1, 0, "right"], [1, 1, "downright"], [2, 1, "down"]]),
+                  makeLayout([[1, 1, "upright"], [1, 2, "right"], [2, 1, "up"]])
+                ];
+              }
+            }
+            if (originalArrows.length === 0) {
+              showStatus("Selected block has no arrows to change.", "error");
+              return;
+            }
+            block.directionCycle = {
+              originalArrows,
+              straightArrowPositions: (straightLine || originalArrows).map(cell => ({
+                row: cell.row,
+                col: cell.col
+              })),
+              mixedLayouts,
+              stage: 0
+            };
+          }
+
+          const cycle = block.directionCycle;
+          const arrowsByPosition = new Map();
+          if (cycle.stage === 0) {
+            for (const arrow of cycle.originalArrows) {
+              arrowsByPosition.set(
+                `${arrow.row},${arrow.col}`,
+                OPPOSITE_DIRECTIONS[arrow.direction]
+              );
+            }
+          } else if (cycle.stage === 1) {
+            for (const position of cycle.straightArrowPositions) {
+              arrowsByPosition.set(`${position.row},${position.col}`, "right");
+            }
+          } else if (cycle.stage === 2) {
+            for (const position of cycle.straightArrowPositions) {
+              arrowsByPosition.set(`${position.row},${position.col}`, "left");
+            }
+          } else if (cycle.mixedLayouts && cycle.stage === 3) {
+            for (const arrow of cycle.mixedLayouts[0]) {
+              arrowsByPosition.set(`${arrow.row},${arrow.col}`, arrow.direction);
+            }
+          } else if (cycle.mixedLayouts && cycle.stage === 4) {
+            for (const arrow of cycle.mixedLayouts[1]) {
+              arrowsByPosition.set(`${arrow.row},${arrow.col}`, arrow.direction);
+            }
+          } else {
+            for (const arrow of cycle.originalArrows) {
+              arrowsByPosition.set(`${arrow.row},${arrow.col}`, arrow.direction);
+            }
+          }
+          block.cells = block.cells.map(cell => ({
+            ...cell,
+            arrow: arrowsByPosition.get(`${cell.row},${cell.col}`) || null
+          }));
+          cycle.stage = (cycle.stage + 1) % (cycle.mixedLayouts ? 6 : 4);
+          countMove();
+          showStatus("The four-gray-cell block moved to the next arrow direction.");
+          render();
+          return;
+        }
+        if (isFiveCellCross) {
+          const layoutCycle = [
+            { "0,1": "up", "1,0": "right", "1,1": "upright" },
+            { "0,1": "down", "1,0": "left", "1,1": "downleft" },
+            { "1,0": "right", "1,1": "right", "1,2": "right" },
+            { "1,0": "left", "1,1": "left", "1,2": "left" }
+          ];
+          const matchesLayout = layout =>
+            block.cells.filter(cell => cell.arrow).length === 3 &&
+            Object.entries(layout).every(([position, direction]) => {
+              const [row, col] = position.split(",").map(Number);
+              const cell = block.cells.find(item =>
+                item.row === blockRow * 3 + row && item.col === blockCol * 3 + col
+              );
+              return cell?.arrow === direction;
+            });
+          const currentLayoutIndex = layoutCycle.findIndex(matchesLayout);
+          const nextLayout = layoutCycle[(currentLayoutIndex + 1) % layoutCycle.length];
+          block.cells = block.cells.map(cell => ({
+            ...cell,
+            arrow: nextLayout[`${cell.row - blockRow * 3},${cell.col - blockCol * 3}`] || null
+          }));
+          countMove();
+          showStatus("The five-gray-cell block moved to the next arrow layout.");
+          render();
+          return;
+        }
+        if (!block.cells.some(cell => cell.arrow)) {
+          showStatus("Selected block has no arrows to change.", "error");
+          return;
+        }
         block.cells = block.cells.map(cell => ({
           ...cell,
-          arrow: cell.arrow ? FLIP[cell.arrow] : null
+          arrow: cell.arrow ? OPPOSITE_DIRECTIONS[cell.arrow] : null
         }));
-        showStatus("Selected block flipped.");
+        countMove();
+        showStatus("Each arrow now points in the opposite direction.");
         render();
       }
 
@@ -709,10 +1051,12 @@
           if (current.row === TARGET.row && current.col === TARGET.col) return { valid: true, path };
 
           const cell = cellMap.get(key);
-          if (!cell?.isDark || !cell.arrow) break;
-          const nextDirection = DIRECTIONS[cell.arrow] ? cell.arrow : CORNERS[cell.arrow]?.[direction];
-          if (!nextDirection) break;
-          direction = nextDirection;
+          if (!cell?.isDark) break;
+          if (cell.arrow) {
+            const nextDirection = DIRECTIONS[cell.arrow] ? cell.arrow : CORNERS[cell.arrow]?.[direction];
+            if (!nextDirection) break;
+            direction = nextDirection;
+          }
           const [deltaRow, deltaCol] = DIRECTIONS[direction];
           const next = { row: current.row + deltaRow, col: current.col + deltaCol };
           if (next.row < 0 || next.row >= size || next.col < 0 || next.col >= size) {
@@ -726,6 +1070,8 @@
 
       function submitPath() {
         if (finished) return;
+        clearSolvedPathFeedback();
+        countMove();
         const result = tracePath();
         if (!result.valid) {
           showStatus("Path not connected yet. Adjust a block and try again.", "error");
@@ -735,9 +1081,114 @@
           window.setTimeout(() => boardShell.classList.remove("shake"), 400);
           return;
         }
-        finished = true;
-        window.clearInterval(timerId);
+        completePath(result.path);
+      }
+
+      function getCenter(element) {
+        const bounds = element.getBoundingClientRect();
+        const layoutBounds = gameLayout.getBoundingClientRect();
+        return {
+          x: bounds.left + bounds.width / 2 - layoutBounds.left,
+          y: bounds.top + bounds.height / 2 - layoutBounds.top
+        };
+      }
+
+      function placeRocket(point, angle = 90) {
+        rocketRunner.style.left = `${point.x}px`;
+        rocketRunner.style.top = `${point.y}px`;
+        rocketRunner.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+      }
+
+      function resetRocket() {
+        if (rocketAnimation) rocketAnimation.cancel();
+        rocketAnimation = null;
+        window.clearTimeout(pathRevealTimerId);
+        pathRevealTimerId = null;
+        board.querySelectorAll(".path-revealed").forEach(cell => cell.classList.remove("path-revealed"));
+        const startArrow = gameLayout.querySelector(".marker.start .marker-arrow");
+        placeRocket(getCenter(startArrow));
+      }
+
+      function clearSolvedPathFeedback() {
+        if (!pathSolved) return;
+        pathSolved = false;
+        victoryOverlay.hidden = true;
+        resetRocket();
+      }
+
+      function revealPathCells(path, interval) {
+        const cells = path
+          .map(({ row, col }) => board.querySelector(`[data-row="${row}"][data-col="${col}"]`))
+          .filter(Boolean);
+        let index = 0;
+        const revealNextCell = () => {
+          if (index >= cells.length) return;
+          cells[index++].classList.add("path-revealed");
+          if (index < cells.length) {
+            pathRevealTimerId = window.setTimeout(revealNextCell, interval);
+          }
+        };
+        revealNextCell();
+      }
+
+      function animateRocketAlongPath(path) {
+        const pathCells = path.filter(({ row, col }) =>
+          board.querySelector(`[data-row="${row}"][data-col="${col}"]`)
+        );
+        const points = [
+          getCenter(gameLayout.querySelector(".marker.start .marker-arrow")),
+          ...pathCells.map(({ row, col }) => {
+            const cell = board.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            return getCenter(cell);
+          }),
+          getCenter(gameLayout.querySelector(".marker.target .marker-arrow"))
+        ];
+        const stepDuration = 450;
+        const keyframes = points.map((point, index) => {
+          const next = points[index + 1] || point;
+          const angle = index < points.length - 1
+            ? Math.atan2(next.y - point.y, next.x - point.x) * 180 / Math.PI + 90
+            : 90;
+          return {
+            left: `${point.x}px`,
+            top: `${point.y}px`,
+            transform: `translate(-50%, -50%) rotate(${angle}deg)`,
+            offset: index / (points.length - 1)
+          };
+        });
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+            typeof rocketRunner.animate !== "function") {
+          const destination = points[points.length - 1];
+          pathCells.forEach(({ row, col }) => {
+            board.querySelector(`[data-row="${row}"][data-col="${col}"]`)?.classList.add("path-revealed");
+          });
+          placeRocket(destination);
+          showVictoryDialog();
+          return;
+        }
+
+        revealPathCells(pathCells, stepDuration);
+        rocketAnimation = rocketRunner.animate(keyframes, {
+          duration: Math.max(3000, (points.length - 1) * stepDuration),
+          easing: "linear",
+          fill: "forwards"
+        });
+        rocketAnimation.onfinish = showVictoryDialog;
+      }
+
+      function showVictoryDialog() {
         showStatus("Great job! START is connected to TARGET.", "success");
+        victorySummary.textContent = `Solved in ${moves} ${moves === 1 ? "move" : "moves"}.`;
+        victoryOverlay.hidden = false;
+        document.getElementById("continueButton").focus();
+      }
+
+      function completePath(path) {
+        pathSolved = true;
+        status.className = "status";
+        status.textContent = "";
+        animateRocketAlongPath(path);
       }
 
       function updateTimer() {
@@ -765,11 +1216,16 @@
 
       function resetGame() {
         blocks = makeInitialBlocks();
-        selectedBlock = currentLevel === 2 ? "2,0" : "0,0";
+        selectedBlock = currentLevel === 2 ? "2,0" : currentLevel === 3 ? "2,2" : "0,0";
         secondsLeft = TIME_LIMIT;
+        moves = 0;
+        movesCount.textContent = "Moves: 0";
         finished = false;
+        pathSolved = false;
+        victoryOverlay.hidden = true;
         showStatus("Select any cell in a 3×3 block to highlight it.");
         render();
+        resetRocket();
         startTimer();
       }
 
@@ -791,6 +1247,10 @@
       document.getElementById("flipButton").addEventListener("click", flipSelectedBlock);
       document.getElementById("submitButton").addEventListener("click", submitPath);
       document.getElementById("resetButton").addEventListener("click", resetGame);
+      document.getElementById("continueButton").addEventListener("click", () => {
+        const lastLevel = Math.max(...Object.keys(LEVELS).map(Number));
+        setLevel(currentLevel < lastLevel ? currentLevel + 1 : 2);
+      });
       document.getElementById("previousLevel").addEventListener("click", () => setLevel(currentLevel - 1));
       document.getElementById("nextLevel").addEventListener("click", () => setLevel(currentLevel + 1));
       document.addEventListener("keydown", event => {
