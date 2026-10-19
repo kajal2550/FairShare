@@ -40,6 +40,12 @@ Then open the local URL (usually `http://localhost:5173`).
 
 The demo group is stored in your browser. If you want the original demo data back, delete `fairshare-v1` under DevTools → Application → Local Storage, and refresh.
 
+## Practice pages
+
+The deployed site also includes standalone Arrow Games, Bubble Game, Door-Key Game, MCQ, and Code practice pages under `public/`. GitHub Pages hosts these pages statically, so the schema diagram and front-end preview work there, but Java compilation and SQL execution require a local Node.js, Python, and Java 21 environment.
+
+To run the local coding service, open a terminal in `public/`, run `node code-server.js`, then visit `http://127.0.0.1:8787/code.html`. The MCQ page is available at `mock-test.html` and includes the 45-minute timer and candidate details form.
+
 ## What we want from you
 
 Find problems, fix them, and record them in `BUGS.md` (this file is already in the repo). Commit `BUGS.md` together with your code changes.

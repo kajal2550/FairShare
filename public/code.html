@@ -1,0 +1,1082 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#062656">
+  <meta name="description" content="Independent coding practice workspace.">
+  <title>Code Practice | Accenture Mock</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #18304e;
+      background: #f1f3f6;
+      --navy: #062656;
+      --line: #d4dce5;
+      --muted: #66758a;
+      --blue: #124eb4;
+      --green: #11813a;
+    }
+
+    * { box-sizing: border-box; }
+    body { min-width: 320px; min-height: 100vh; margin: 0; background: #f1f3f6; }
+    button, select, textarea, input { font: inherit; }
+    button { cursor: pointer; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+    .recording-notice {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      align-items: center;
+      min-height: 42px;
+      padding: 7px max(18px, calc((100% - 1500px) / 2));
+      background: #252a2f;
+      color: #f2f4f7;
+      font-size: 12px;
+    }
+    .mini-brand { font-size: 16px; font-weight: 700; }
+    .recording-notice strong { text-align: center; }
+    .candidate { color: #d6dbe3; text-align: right; }
+    .brand-row {
+      display: flex;
+      min-height: 76px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px max(24px, calc((100% - 1440px) / 2));
+      background: var(--navy);
+      color: #fff;
+    }
+    .brand {
+      position: relative;
+      flex: 0 0 auto;
+      color: #fff;
+      font-size: 29px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      text-decoration: none;
+    }
+    .brand-mark { position: absolute; top: -13px; left: 40%; color: #a100ff; font-size: 20px; }
+    .assessment-context { min-width: 0; flex: 1 1 auto; padding-left: 16px; border-left: 1px solid #627796; }
+    .assessment-id { display: block; margin-bottom: 4px; font-size: 12px; }
+    .course-line { display: flex; min-width: 0; align-items: center; gap: 9px; color: #d5dfed; font-size: 12px; }
+    .course-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .saved { flex: 0 0 auto; white-space: nowrap; }
+    .header-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 14px; font-size: 12px; }
+    .timer { font-variant-numeric: tabular-nums; font-weight: 700; }
+    .header-button {
+      min-height: 34px;
+      padding: 7px 12px;
+      border: 1px solid #b8c7dd;
+      border-radius: 4px;
+      background: transparent;
+      color: #fff;
+    }
+    .site-navigation { display: flex; align-items: center; gap: 7px; }
+    .site-navigation a {
+      padding: 7px 9px;
+      border: 1px solid rgb(255 255 255 / 22%);
+      border-radius: 4px;
+      color: #e6edf8;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .site-navigation a:hover, .site-navigation a[aria-current="page"] { background: #263a58; color: #fff; }
+    main { width: min(100% - 48px, 1440px); margin: 0 auto; }
+    .hosting-note { margin: 14px auto 0; padding: 10px 14px; width: min(100% - 48px, 1440px); border: 1px solid #e5c77a; border-radius: 4px; background: #fff8e5; color: #594617; font-size: 13px; line-height: 1.5; }
+    .hosting-note[hidden] { display: none; }
+    .hosting-note code { font-weight: 700; }
+    .hosting-note a { color: #124eb4; font-weight: 700; }
+    .workspace-toolbar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      min-height: 52px;
+      align-items: center;
+      gap: 9px;
+      margin-top: 0;
+      padding: 8px 16px;
+      border: 1px solid var(--line);
+      border-bottom: 0;
+      border-radius: 4px 4px 0 0;
+      background: #fff;
+    }
+    .section-select, .language-select {
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid #d1dae5;
+      border-radius: 4px;
+      background: #fff;
+      color: #263c59;
+    }
+    .section-select { min-width: 215px; }
+    .tool-icon {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 1px solid #d4dce5;
+      border-radius: 4px;
+      background: #fff;
+      color: #344b68;
+      font-size: 16px;
+    }
+    .toolbar-spacer { flex: 1; }
+    .next-section {
+      min-height: 34px;
+      padding: 7px 14px;
+      border: 0;
+      border-radius: 4px;
+      background: var(--green);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .workbench {
+      display: grid;
+      height: min(69vh, 680px);
+      min-height: 500px;
+      grid-template-columns: minmax(300px, .94fr) minmax(420px, 1.06fr);
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 3px 14px rgb(22 39 62 / 5%);
+    }
+    .problem-panel, .editor-panel { min-width: 0; min-height: 0; }
+    .problem-panel { overflow: auto; padding: 28px 30px; border-right: 1px solid var(--line); }
+    .problem-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+    .problem-heading h1 { margin: 0; font-size: 15px; }
+    .revisit {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 0;
+      background: transparent;
+      color: #415774;
+      font-size: 13px;
+    }
+    .problem-content { color: #263a56; font-size: 14px; line-height: 1.6; }
+    .problem-content h2 { margin: 0 0 12px; color: var(--blue); font-size: 14px; }
+    .problem-content p { margin: 14px 0; }
+    .note { font-size: 13px; font-style: italic; }
+    .spec-title { margin: 18px 0 7px; font-weight: 700; }
+    .spec-box, .example-box { margin: 6px 0 14px; padding: 10px 12px; background: #f2f3f5; }
+    .spec-box strong { display: block; margin-bottom: 4px; }
+    .example-box { font-weight: 600; }
+    .editor-panel { display: grid; grid-template-rows: 38px minmax(0, 1fr) auto auto; }
+    .editor-toolbar {
+      display: flex;
+      min-width: 0;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfd;
+      color: #415572;
+      font-size: 12px;
+    }
+    .language-select { width: 150px; height: 37px; border: 0; border-right: 1px solid var(--line); border-radius: 0; }
+    .web-language-tabs { display: flex; height: 100%; align-items: stretch; border-right: 1px solid var(--line); }
+    .web-language-tabs[hidden] { display: none; }
+    .web-language-tab { min-width: 72px; padding: 0 12px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #415572; font-size: 12px; cursor: pointer; }
+    .web-language-tab.active { border-bottom-color: var(--blue); color: #173b70; font-weight: 700; }
+    .database-result-tabs { display: flex; min-height: 38px; align-items: stretch; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #fff; }
+    .database-result-tabs[hidden] { display: none; }
+    .database-result-tab { padding: 0 12px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #455970; font-size: 12px; cursor: pointer; }
+    .database-result-tab[aria-selected="true"] { border-bottom-color: var(--blue); color: #183e76; font-weight: 700; }
+    .sql-language-badge { width: 150px; padding: 0 16px; color: #334b68; font-size: 12px; font-weight: 700; }
+    .sql-language-badge[hidden] { display: none; }
+    .database-schema { min-height: 0; overflow: auto; padding: 0; background: #fff; color: #29405a; font-size: 12px; }
+    .database-schema[hidden] { display: none; }
+    .schema-view-toolbar { position: sticky; top: 0; z-index: 3; display: flex; min-height: 42px; align-items: center; justify-content: space-between; padding: 0 14px; border-bottom: 1px solid var(--line); background: #fff; }
+    .schema-view-toolbar strong { font-size: 12px; }
+    .schema-zoom-controls { display: flex; gap: 4px; }
+    .schema-zoom-controls button { display: grid; width: 30px; height: 30px; place-items: center; border: 0; background: transparent; color: #455970; }
+    .schema-zoom-controls button:hover { background: #f1f5f9; }
+    .schema-zoom-controls svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-width: 1.8; }
+    .schema-diagram { position: relative; width: 770px; height: 440px; margin: 0 auto; background: #fff; transform-origin: top left; }
+    .schema-relations { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+    .schema-relations path { fill: none; stroke: #4b5563; stroke-width: 1.35; }
+    .schema-relations text { fill: #40536c; font: 9px Arial, sans-serif; }
+    .schema-table { position: absolute; z-index: 2; width: 210px; border: 1px solid #525b66; background: #fff; box-shadow: 0 1px 2px rgb(0 0 0 / 8%); }
+    .schema-table h2 { display: flex; justify-content: space-between; gap: 8px; margin: 0; padding: 4px 6px; border-bottom: 1px solid #c8ced6; background: #f6b49c; color: #252a2f; font-size: 10px; }
+    .schema-table h2 span { font-size: 9px; font-weight: 400; }
+    .schema-table dl { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 6px; margin: 0; padding: 3px 6px; font-size: 9px; line-height: 14px; }
+    .schema-table dt { min-width: 0; overflow: hidden; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+    .schema-table dt.key { font-style: italic; font-weight: 700; }
+    .schema-table dd { margin: 0; color: #48566a; white-space: nowrap; }
+    .schema-leave { top: 18px; left: 14px; }
+    .schema-payroll { top: 190px; left: 14px; }
+    .schema-employee { top: 98px; left: 280px; width: 238px; }
+    .schema-department { top: 75px; right: 12px; width: 190px; }
+    .schema-allocated { top: 190px; right: 12px; width: 210px; }
+    .schema-salary { top: 290px; right: 12px; width: 210px; }
+    .query-result-table { width: 100%; border-collapse: collapse; background: #fff; font-size: 12px; }
+    .query-result-table th, .query-result-table td { padding: 7px 9px; border: 1px solid var(--line); text-align: left; }
+    .query-result-table th { background: #f1f5f9; }
+    .test-result.passed { color: #166534; font-weight: 700; }
+    .test-result.failed { color: #a12c2c; font-weight: 700; }
+    .preview-frame { display: block; width: 100%; height: 100%; min-height: 180px; border: 0; background: #f2f2f7; }
+    .preview-frame[hidden] { display: none; }
+    .editor-panel.frontend-active { grid-template-rows: 38px minmax(140px, .72fr) minmax(180px, .9fr) auto auto; }
+    .editor-panel.frontend-active #editorOutput { display: none; }
+    .editor-panel.frontend-active #editorOutput.visible { display: block; }
+    .editor-panel.database-active { grid-template-rows: 38px minmax(120px, 1fr) 38px minmax(90px, .7fr) auto; }
+    .editor-panel.database-active .database-result-tabs:not([hidden]) { display: flex; }
+    .editor-panel.database-active .database-schema:not([hidden]) { display: block; }
+    .editor-panel.database-active .code-editor[hidden] { display: none; }
+    .editor-panel.database-active #previewFrame[hidden],
+    .editor-panel.database-active #editorOutput[hidden] { display: none; }
+    .editor-panel.database-active #editorOutput:not([hidden]) { display: block; }
+    .compiler-version { flex: 1; overflow: hidden; padding: 0 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .editor-tool {
+      width: 38px;
+      height: 36px;
+      border: 0;
+      background: transparent;
+      color: #40536c;
+      font-size: 16px;
+    }
+    .editor-tool:hover { background: #eef2f7; }
+    .code-editor {
+      display: grid;
+      min-height: 0;
+      grid-template-columns: 42px minmax(0, 1fr);
+      overflow: hidden;
+      background: #fff;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+      line-height: 20px;
+      tab-size: 4;
+    }
+    .line-numbers {
+      overflow: hidden;
+      padding: 12px 8px 12px 0;
+      background: #fbfcfd;
+      color: #538096;
+      text-align: right;
+      white-space: pre;
+      user-select: none;
+    }
+    #codeInput {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      resize: none;
+      overflow: auto;
+      padding: 12px 12px 20px;
+      border: 0;
+      outline: 0;
+      background: #fff;
+      color: #252f3b;
+      font: inherit;
+      line-height: inherit;
+      tab-size: 4;
+      white-space: pre;
+    }
+    .editor-output {
+      display: none;
+      max-height: 110px;
+      overflow: auto;
+      padding: 9px 14px;
+      border-top: 1px solid var(--line);
+      background: #f8fafc;
+      color: #324860;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .editor-output.visible { display: block; }
+    .editor-output.error { color: #a12c2c; }
+    .editor-footer {
+      display: flex;
+      min-height: 64px;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--line);
+      background: #fbfcfd;
+    }
+    .custom-input { display: flex; align-items: center; gap: 7px; margin-right: auto; color: #31455f; font-size: 12px; white-space: nowrap; }
+    .custom-input[hidden] { display: none; }
+    .custom-input input { accent-color: var(--blue); }
+    #customValue {
+      width: 90px;
+      min-height: 32px;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+    #customValue[hidden] { display: none; }
+    .action-button { min-height: 34px; padding: 7px 12px; border: 1px solid var(--blue); border-radius: 4px; background: #fff; color: var(--blue); font-size: 12px; white-space: nowrap; }
+    .action-button.primary { background: var(--blue); color: #fff; }
+    .action-button:hover { filter: brightness(.95); }
+    .bottom-bar {
+      display: flex;
+      min-height: 44px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 24px;
+      background: #fff;
+      color: #65748a;
+      font-size: 11px;
+    }
+    .connection { color: #138c69; font-weight: 700; }
+    .toast {
+      position: fixed;
+      z-index: 5;
+      right: 20px;
+      bottom: 58px;
+      max-width: min(420px, calc(100% - 40px));
+      padding: 12px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      background: #fff;
+      color: #344861;
+      box-shadow: 0 5px 18px rgb(0 0 0 / 14%);
+      font-size: 13px;
+    }
+    .toast[hidden] { display: none; }
+    @media (max-width: 960px) {
+      .brand-row { flex-wrap: wrap; }
+      .assessment-context { flex-basis: 45%; }
+      .header-actions { margin-left: auto; }
+      .site-navigation { width: 100%; flex-wrap: wrap; }
+      main { width: min(100% - 24px, 1440px); }
+      .hosting-note { width: calc(100% - 24px); }
+      .workbench { grid-template-columns: minmax(260px, .85fr) minmax(380px, 1.15fr); }
+      .problem-panel { padding: 22px; }
+    }
+    @media (max-width: 700px) {
+      .recording-notice { grid-template-columns: auto 1fr; gap: 10px; padding-inline: 12px; }
+      .recording-notice strong { text-align: right; font-size: 10px; }
+      .candidate { display: none; }
+      .brand-row { padding: 10px 14px; }
+      .assessment-context { flex: 1 1 180px; }
+      .header-actions { width: 100%; justify-content: space-between; }
+      .site-navigation { gap: 5px; }
+      .site-navigation a { padding: 6px 7px; font-size: 11px; }
+      main { width: calc(100% - 16px); }
+      .hosting-note { width: calc(100% - 16px); }
+      .workspace-toolbar { flex-wrap: wrap; padding: 8px; }
+      .section-select { min-width: min(215px, calc(100vw - 120px)); }
+      .workbench { height: auto; min-height: 0; grid-template-columns: 1fr; }
+      .problem-panel { max-height: 45vh; border-right: 0; border-bottom: 1px solid var(--line); }
+      .editor-panel { height: 65vh; min-height: 470px; }
+      .editor-footer { flex-wrap: wrap; }
+      .custom-input { margin-right: auto; }
+      .bottom-bar { flex-wrap: wrap; padding-inline: 12px; }
+    }
+    @media (max-width: 440px) {
+      .workspace-toolbar .tool-icon { display: none; }
+      .next-section { margin-left: auto; }
+      .problem-panel { padding: 18px; }
+      .editor-footer { gap: 6px; padding: 8px; }
+      .custom-input { width: 100%; }
+      #customValue { flex: 1; }
+      .action-button { padding-inline: 8px; font-size: 11px; }
+      .language-select { width: 118px; }
+      .database-result-tab { padding-inline: 8px; font-size: 11px; }
+      .editor-tool { width: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="recording-notice">
+      <span class="mini-brand">Accenture</span>
+      <strong>Independent practice — not monitored or recorded.</strong>
+      <span class="candidate">Practice Mode</span>
+    </div>
+    <div class="brand-row">
+      <a class="brand" href="mock-test.html" aria-label="Practice home">Accenture<span class="brand-mark" aria-hidden="true">&gt;</span></a>
+      <div class="assessment-context">
+        <strong class="assessment-id">24103047</strong>
+        <div class="course-line">
+          <span class="course-title">Campus Hiring - Coding Practice</span>
+          <span aria-hidden="true">/</span>
+          <span class="saved">Local Practice</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <span>◷ Assessment Time: <span class="timer" id="timer">45:00</span></span>
+        <button class="header-button" id="fullscreenButton" type="button" title="Toggle full screen">⛶</button>
+        <button class="header-button" id="finishButton" type="button">Finish Practice</button>
+      </div>
+      <nav class="site-navigation" aria-label="Game navigation">
+        <a href="game.html">Arrow Games</a>
+        <a href="bubble.html">Bubble Game</a>
+        <a href="door-key.html">Door-Key Game</a>
+        <a href="mock-test.html">MCQ</a>
+        <a href="code.html" aria-current="page">Code</a>
+      </nav>
+    </div>
+  </header>
+  <aside class="hosting-note" id="hostingNote" hidden>
+    GitHub Pages is static hosting, so Java compilation and SQL queries need the local practice service. From this folder, run <code>node code-server.js</code> and open <a href="http://127.0.0.1:8787/code.html">the local coding workspace</a>.
+  </aside>
+  <main>
+    <div class="workspace-toolbar">
+      <label class="sr-only" for="sectionSelect">Select coding section</label>
+      <select class="section-select" id="sectionSelect" aria-label="Coding section">
+        <option value="backend">1. Backend</option>
+        <option value="database" selected>2. Database</option>
+        <option value="frontend">3. Front End Technology</option>
+      </select>
+      <button class="tool-icon" type="button" title="Question information" aria-label="Question information">ⓘ</button>
+      <span class="toolbar-spacer"></span>
+      <button class="tool-icon" id="nextQuestion" type="button" title="Next question" aria-label="Next question">›</button>
+      <button class="tool-icon" type="button" title="Question list" aria-label="Question list">▦</button>
+      <button class="next-section" id="nextSection" type="button">Next Section</button>
+    </div>
+    <div class="workbench">
+      <section class="problem-panel" aria-labelledby="questionTitle">
+        <div class="problem-heading">
+          <h1 id="questionTitle">Question 1</h1>
+          <button class="revisit" id="revisitButton" type="button">♧ <span>Revisit Later</span></button>
+        </div>
+        <div class="problem-content" id="backendProblem">
+          <h2>How to Attempt?</h2>
+          <p>A tech company uses a custom numbering system that excludes any number containing the digit 7. You are given an integer <strong>K</strong> denoting the desired position in the filtered sequence, and your task is to find and return a string value representing the K<sup>th</sup> valid number in the sequence of natural numbers that do not contain the digit 7.</p>
+          <p class="note"><strong>Note:</strong> Assume 1-based indexing.</p>
+          <p class="spec-title">Input Specification:</p>
+          <div class="spec-box"><strong>input1 :</strong> An integer value K, representing the desired position in the sequence.</div>
+          <p class="spec-title">Output Specification:</p>
+          <div class="spec-box">Return a string value representing the K<sup>th</sup> number in the sequence of natural numbers that do not contain the digit 7.</div>
+          <p class="spec-title">Example 1:</p>
+          <div class="example-box">input1 : 7</div>
+          <div class="example-box">Output : 8</div>
+          <p><strong>Explanation:</strong> The filtered sequence begins 1, 2, 3, 4, 5, 6, 8, ... For K = 7, the 7th number is 8.</p>
+          <p class="spec-title">Example 2:</p>
+          <div class="example-box">input1 : 17</div>
+          <div class="example-box">Output : 19</div>
+          <p><strong>Explanation:</strong> The filtered sequence continues 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, ... For K = 17, the 17th number is 19.</p>
+        </div>
+        <div class="problem-content" id="frontendProblem" hidden>
+          <h2>How to Attempt?</h2>
+          <p>A web page contains an image with the heading <strong>Change Image on Hover</strong>. Update the page so the image changes when the pointer moves over it and returns to its original image when the pointer moves away. Use the image URLs in the provided JavaScript template.</p>
+          <p class="spec-title">Task:</p>
+          <div class="spec-box">Change the image height and width to <strong>300px</strong>. Add a smooth hover transition and scale the image slightly when the pointer is over it.</div>
+          <p class="spec-title">Constraints:</p>
+          <div class="spec-box">Do not change the id or class attributes of any elements, as they are used by the JavaScript code.<br><br>Ensure that the styling is applied correctly according to the provided CSS.</div>
+          <p class="spec-title">Expected Output:</p>
+          <div class="spec-box">A centered card titled “Change Image on Hover”. It shows one landscape image by default, switches to the alternate landscape on hover, and switches back when the pointer leaves.</div>
+        </div>
+        <div class="problem-content" id="databaseProblem" hidden>
+          <h2>How to Attempt?</h2>
+          <p>Write an SQL query to display:</p>
+          <div class="spec-box">The employee ID, Name, Basic salary, and Net pay for employees whose basic salary is greater than 5,000.</div>
+          <p>Your output should have 4 columns as given below:</p>
+          <div class="example-box">EMPID&nbsp;&nbsp; EMPNAME&nbsp;&nbsp; BASIC&nbsp;&nbsp; NETPAY</div>
+          <p>You can view the database schema by clicking the <strong>View Schema</strong> tab at the bottom of the query window on the right-hand side of the screen.</p>
+          <p>Use <strong>Run Query</strong> to see the rows returned by your query, and <strong>Check Query</strong> to validate the output.</p>
+        </div>
+      </section>
+      <section class="editor-panel" aria-label="Code editor">
+        <div class="editor-toolbar">
+          <label class="sr-only" for="languageSelect">Programming language</label>
+          <select class="language-select" id="languageSelect" aria-label="Programming language">
+            <option value="java">JAVA</option>
+          </select>
+          <span class="sql-language-badge" id="sqlLanguageBadge" hidden>SQL</span>
+          <div class="web-language-tabs" id="webLanguageTabs" role="tablist" aria-label="Web code editor" hidden>
+            <button class="web-language-tab active" type="button" role="tab" id="htmlTab" aria-selected="true" data-language="html">HTML</button>
+            <button class="web-language-tab" type="button" role="tab" id="cssTab" aria-selected="false" data-language="css">CSS</button>
+            <button class="web-language-tab" type="button" role="tab" id="javascriptTab" aria-selected="false" data-language="javascript">JavaScript</button>
+          </div>
+          <span class="compiler-version" id="compilerVersion">Compiler: Java 21</span>
+          <button class="editor-tool" id="resetCode" type="button" title="Reset code" aria-label="Reset code">↶</button>
+          <button class="editor-tool" id="toggleTheme" type="button" title="Toggle editor theme" aria-label="Toggle editor theme">◐</button>
+          <button class="editor-tool" id="formatCode" type="button" title="Indent selected line" aria-label="Indent selected line">&lt;/&gt;</button>
+          <button class="editor-tool" type="button" title="Expand editor" aria-label="Expand editor">⤢</button>
+          <button class="editor-tool" id="editorInfo" type="button" title="Compiler information" aria-label="Compiler information">⋮</button>
+        </div>
+        <div class="code-editor" id="codeEditor">
+          <div class="line-numbers" id="lineNumbers" aria-hidden="true"></div>
+          <textarea id="codeInput" aria-label="Write your solution here" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+        </div>
+        <div class="database-schema" id="databaseSchema" hidden>
+          <div class="schema-view-toolbar">
+            <strong>View Schema</strong>
+            <div class="schema-zoom-controls" aria-label="Schema zoom controls">
+              <button id="schemaZoomIn" type="button" aria-label="Zoom in" title="Zoom in"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5M10.5 7.5v6M7.5 10.5h6"/></svg></button>
+              <button id="schemaZoomReset" type="button" aria-label="Reset zoom" title="Reset zoom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10a8 8 0 1 1 2 7M4 5v5h5"/></svg></button>
+              <button id="schemaZoomOut" type="button" aria-label="Zoom out" title="Zoom out"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5M7.5 10.5h6"/></svg></button>
+            </div>
+          </div>
+          <div class="schema-diagram" id="schemaDiagram" role="img" aria-label="Database schema diagram showing relationships between six employee database tables">
+            <svg class="schema-relations" viewBox="0 0 770 440" aria-hidden="true">
+              <path d="M224 48 C255 48 258 128 280 128"/>
+              <text x="236" y="68">LEAVE_INFO</text>
+              <path d="M224 234 C252 234 255 142 280 142"/>
+              <text x="234" y="220">EMP_PAYROLL</text>
+              <path d="M518 156 C572 156 585 108 580 108"/>
+              <text x="523" y="119">employee_info_ibfk_1</text>
+              <path d="M518 212 C566 212 571 220 560 220"/>
+              <text x="522" y="205">employee_info_ibfk_3</text>
+              <path d="M518 212 C560 212 568 326 560 326"/>
+              <text x="522" y="270">employee_info_ibfk_2</text>
+            </svg>
+            <section class="schema-table schema-leave" aria-label="emp_leave_info table">
+              <h2>emp_leave_info <span>[table]</span></h2>
+              <dl><dt class="key">EMPID</dt><dd>VARCHAR(10)</dd><dt>FROM_DATE</dt><dd>DATE</dd><dt>TO_DATE</dt><dd>DATE</dd><dt>TOTAL_LEAVES</dt><dd>DECIMAL(10,0)</dd><dt>LEAVE_TYPE</dt><dd>VARCHAR(5)</dd></dl>
+            </section>
+            <section class="schema-table schema-payroll" aria-label="emp_payroll table">
+              <h2>emp_payroll <span>[table]</span></h2>
+              <dl><dt>TRANSNO</dt><dd>DECIMAL(10,0)</dd><dt class="key">EMPID</dt><dd>VARCHAR(10)</dd><dt>_MONTH</dt><dd>VARCHAR(10)</dd><dt>_YEAR</dt><dd>DECIMAL(4,0)</dd><dt>TOTALEARNING</dt><dd>DECIMAL(10,0)</dd><dt>NETPAY</dt><dd>DECIMAL(10,0)</dd></dl>
+            </section>
+            <section class="schema-table schema-employee" aria-label="employee_info table">
+              <h2>employee_info <span>[table]</span></h2>
+              <dl><dt class="key">EMPID</dt><dd>VARCHAR(10)</dd><dt>EMPNAME</dt><dd>VARCHAR(20)</dd><dt>DEPTID</dt><dd>VARCHAR(10)</dd><dt>JOINING_DT</dt><dd>DATE</dd><dt>DOB</dt><dd>DATE</dd><dt>YRS_OF_EXP</dt><dd>DECIMAL(10,0)</dd><dt>EMPLOYEE_CATEGORY</dt><dd>VARCHAR(1)</dd></dl>
+            </section>
+            <section class="schema-table schema-department" aria-label="dept_info table">
+              <h2>dept_info <span>[table]</span></h2>
+              <dl><dt class="key">DEPTID</dt><dd>VARCHAR(10)</dd><dt>DEPTNAME</dt><dd>VARCHAR(20)</dd><dt>LOCATION</dt><dd>VARCHAR(20)</dd></dl>
+            </section>
+            <section class="schema-table schema-allocated" aria-label="allocated_leave_info table">
+              <h2>allocated_leave_info <span>[table]</span></h2>
+              <dl><dt class="key">EMPLOYEE_CATEGORY</dt><dd>VARCHAR(1)</dd><dt>CL</dt><dd>DECIMAL(10,0)</dd><dt>EL</dt><dd>DECIMAL(10,0)</dd><dt>ML</dt><dd>DECIMAL(10,0)</dd></dl>
+            </section>
+            <section class="schema-table schema-salary" aria-label="salary_info table">
+              <h2>salary_info <span>[table]</span></h2>
+              <dl><dt class="key">EMPLOYEE_CATEGORY</dt><dd>VARCHAR(1)</dd><dt>BASIC</dt><dd>DECIMAL(7,2)</dd><dt>TRAVELLING_ALLOWANCE</dt><dd>DECIMAL(6,2)</dd><dt>DEARNESS_ALLOWANCE</dt><dd>DECIMAL(6,2)</dd><dt>HOUSE_RENT_ALLOWANCE</dt><dd>DECIMAL(6,2)</dd><dt>LOCATION_ALLOWANCE</dt><dd>DECIMAL(6,2)</dd><dt>PROVIDENT_FUND</dt><dd>DECIMAL(6,2)</dd><dt>MEDICAL_ALLOWANCE</dt><dd>DECIMAL(6,2)</dd><dt>PROFITAX</dt><dd>DECIMAL(6,2)</dd><dt>INSURANCE</dt><dd>DECIMAL(6,2)</dd></dl>
+            </section>
+          </div>
+        </div>
+        <div class="database-result-tabs" id="databaseResultTabs" role="tablist" aria-label="SQL workspace tabs" hidden>
+          <button class="database-result-tab" type="button" role="tab" aria-selected="true" data-db-tab="query">Query</button>
+          <button class="database-result-tab" type="button" role="tab" aria-selected="false" data-db-tab="schema">View Schema</button>
+          <button class="database-result-tab" type="button" role="tab" aria-selected="false" data-db-tab="output">Output</button>
+          <button class="database-result-tab" type="button" role="tab" aria-selected="false" data-db-tab="tests">Test Cases</button>
+        </div>
+        <div class="editor-output" id="editorOutput" role="status" aria-live="polite"></div>
+        <iframe class="preview-frame" id="previewFrame" title="Live web page preview" sandbox="allow-scripts" hidden></iframe>
+        <div class="editor-footer">
+          <label class="custom-input" id="customInputLabel"><input id="customInputToggle" type="checkbox"> Use Custom Input</label>
+          <input id="customValue" type="text" inputmode="numeric" placeholder="Enter K" aria-label="Custom input K" hidden>
+          <button class="tool-icon" id="helpButton" type="button" title="Compiler status" aria-label="Compiler status">ⓘ</button>
+          <button class="action-button primary" id="compileButton" type="button">Compile and Test</button>
+          <button class="action-button" id="submitCode" type="button">Submit Code</button>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer class="bottom-bar">
+    <span class="connection" aria-label="Local practice">●</span>
+    <span>Runs locally with your Windows account permissions; only run code you trust.</span>
+    <span>Need Help? Contact your practice administrator</span>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script>
+    (() => {
+      "use strict";
+
+      const templates = {
+        sql: `-- Write your SQL query here`,
+        java: `// Read only region start
+class UserMainCode {
+    public String findingSeven(int input1) {
+        // Expected return type: String
+        // Read only region end
+        // Write code here
+        return "";
+    }
+}`
+      };
+      const frontendTemplates = {
+        html: `<main class="container">
+  <h1>Change Image on Hover</h1>
+  <img id="hoverImage" alt="A landscape that changes when hovered">
+</main>`,
+        css: `* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0eff5;
+}
+
+.container {
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 20px;
+}
+
+img {
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  transition: all .5s;
+  object-fit: cover;
+}
+
+img:hover {
+  transition: all .5s;
+  transform: scale(1.05);
+}`,
+        javascript: `const image = document.getElementById("hoverImage");
+
+function makeLandscape(sky, sun, hill, foreground) {
+  const svg = \`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+    <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="\${sky}"/><stop offset="1" stop-color="#dce9d4"/></linearGradient></defs>
+    <rect width="300" height="300" fill="url(#sky)"/>
+    <circle cx="218" cy="76" r="35" fill="\${sun}"/>
+    <path d="M0 195 Q72 127 143 192 T300 154 V300 H0Z" fill="\${hill}"/>
+    <path d="M0 230 Q95 165 174 228 T300 194 V300 H0Z" fill="\${foreground}"/>
+    <path d="M0 265 Q92 225 174 264 T300 242 V300 H0Z" fill="#264b35" opacity=".62"/>
+    <g fill="#203d2d"><circle cx="49" cy="178" r="18"/><circle cx="69" cy="166" r="25"/><rect x="57" y="181" width="7" height="41"/>
+      <circle cx="245" cy="184" r="21"/><circle cx="267" cy="171" r="28"/><rect x="254" y="187" width="8" height="45"/></g>
+  </svg>\`;
+  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+}
+
+const images = {
+  default: makeLandscape("#102b4d", "#c4e2ed", "#247b85", "#164657"),
+  hover: makeLandscape("#b6df83", "#fff1a2", "#82a84d", "#547d3c")
+};
+
+image.src = images.default;
+image.addEventListener("mouseenter", () => {
+  image.src = images.hover;
+});
+image.addEventListener("mouseleave", () => {
+  image.src = images.default;
+});`
+      };
+      const codeInput = document.getElementById("codeInput");
+      const lineNumbers = document.getElementById("lineNumbers");
+      const output = document.getElementById("editorOutput");
+      const previewFrame = document.getElementById("previewFrame");
+      const editorPanel = document.querySelector(".editor-panel");
+      const sectionSelect = document.getElementById("sectionSelect");
+      const webLanguageTabs = document.getElementById("webLanguageTabs");
+      const databaseResultTabs = document.getElementById("databaseResultTabs");
+      const databaseSchema = document.getElementById("databaseSchema");
+      const codeEditor = document.getElementById("codeEditor");
+      const sqlLanguageBadge = document.getElementById("sqlLanguageBadge");
+      const languageSelect = document.getElementById("languageSelect");
+      const customInputLabel = document.getElementById("customInputLabel");
+      const backendProblem = document.getElementById("backendProblem");
+      const frontendProblem = document.getElementById("frontendProblem");
+      const databaseProblem = document.getElementById("databaseProblem");
+      const toast = document.getElementById("toast");
+      const isGitHubPages = location.hostname.endsWith("github.io");
+      document.getElementById("hostingNote").hidden = !isGitHubPages;
+      let toastTimeout;
+      let timerInterval;
+      let remaining = 45 * 60;
+      let activeWebLanguage = "html";
+      let frontendCode = { ...frontendTemplates };
+      let isFrontend = false;
+      let isDatabase = false;
+      let schemaZoom = 1;
+      let lastQueryResult = null;
+      let activeDatabaseTab = "query";
+
+      function renderLines() {
+        const count = codeInput.value.split("\n").length;
+        lineNumbers.textContent = Array.from({ length: count }, (_, index) => index + 1).join("\n");
+        lineNumbers.scrollTop = codeInput.scrollTop;
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.hidden = false;
+        window.clearTimeout(toastTimeout);
+        toastTimeout = window.setTimeout(() => {
+          toast.hidden = true;
+        }, 4000);
+      }
+
+      function showOutput(message, isError = false) {
+        output.textContent = message;
+        output.classList.toggle("error", isError);
+        output.classList.add("visible");
+      }
+
+      function renderWebPreview() {
+        const safeHtml = frontendCode.html.replace(/<\s*script/gi, "&lt;script").replace(/<\s*\/\s*script\s*>/gi, "&lt;/script&gt;");
+        const safeScript = frontendCode.javascript.replace(/<\/script/gi, "<\\/script");
+        previewFrame.srcdoc = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data: blob:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none';">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>${frontendCode.css}</style></head><body>${safeHtml}
+<script>${safeScript}<\/script></body></html>`;
+      }
+
+      function setFrontendLanguage(language) {
+        if (isFrontend) frontendCode[activeWebLanguage] = codeInput.value;
+        activeWebLanguage = language;
+        codeInput.value = frontendCode[language];
+        document.querySelectorAll(".web-language-tab").forEach(tab => {
+          const selected = tab.dataset.language === language;
+          tab.classList.toggle("active", selected);
+          tab.setAttribute("aria-selected", String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+        });
+        renderLines();
+      }
+
+      function setCodingMode(mode) {
+        isFrontend = mode === "frontend";
+        isDatabase = mode === "database";
+        editorPanel.classList.toggle("frontend-active", isFrontend);
+        editorPanel.classList.toggle("database-active", isDatabase);
+        languageSelect.hidden = isFrontend || isDatabase;
+        sqlLanguageBadge.hidden = !isDatabase;
+        webLanguageTabs.hidden = !isFrontend;
+        databaseResultTabs.hidden = !isDatabase;
+        customInputLabel.hidden = isFrontend || isDatabase;
+        document.getElementById("customValue").hidden = true;
+        document.getElementById("customInputToggle").checked = false;
+        backendProblem.hidden = isFrontend || isDatabase;
+        frontendProblem.hidden = !isFrontend;
+        databaseProblem.hidden = !isDatabase;
+        document.getElementById("compilerVersion").textContent = isFrontend ? "Live Preview · HTML, CSS & JavaScript" : "Compiler: Java 21";
+        if (isDatabase) document.getElementById("compilerVersion").textContent = "Database: SQLite sample schema";
+        document.getElementById("nextSection").textContent = isFrontend ? "Previous Section" : "Next Section";
+        previewFrame.hidden = !isFrontend;
+        codeEditor.hidden = isDatabase && activeDatabaseTab !== "query";
+        databaseSchema.hidden = !isDatabase || activeDatabaseTab !== "schema";
+        output.hidden = isDatabase && activeDatabaseTab !== "output" && activeDatabaseTab !== "tests";
+        document.getElementById("compileButton").textContent = isDatabase ? "Run Query" : "Compile and Test";
+        document.getElementById("submitCode").textContent = isDatabase ? "Check Query" : "Submit Code";
+        if (isFrontend) {
+          activeWebLanguage = "html";
+          codeInput.value = frontendCode.html;
+          setFrontendLanguage("html");
+          renderWebPreview();
+        } else if (isDatabase) {
+          activeDatabaseTab = "query";
+          lastQueryResult = null;
+          codeInput.value = templates.sql;
+          codeEditor.hidden = false;
+          databaseSchema.hidden = true;
+          output.hidden = true;
+          document.querySelectorAll("[data-db-tab]").forEach(tab => {
+            tab.setAttribute("aria-selected", String(tab.dataset.dbTab === "query"));
+          });
+        } else {
+          codeInput.value = templates.java;
+        }
+        output.classList.remove("visible");
+        renderLines();
+      }
+
+      function setDatabaseTab(tabName) {
+        activeDatabaseTab = tabName;
+        document.querySelectorAll("[data-db-tab]").forEach(tab => {
+          tab.setAttribute("aria-selected", String(tab.dataset.dbTab === tabName));
+        });
+        codeEditor.hidden = !isDatabase || tabName !== "query";
+        databaseSchema.hidden = !isDatabase || tabName !== "schema";
+        output.hidden = !isDatabase || (tabName !== "output" && tabName !== "tests");
+        if (isDatabase && (tabName === "output" || tabName === "tests") && !lastQueryResult) {
+          showOutput(tabName === "tests"
+            ? "Test cases: K = 7 → Expected 8; K = 17 → Expected 19. Run the SQL query to view database test results."
+            : "Run your query to view the output.");
+        }
+      }
+
+      function formatSqlResult(result, check) {
+        if (!result.ok) {
+          return `SQL error:\n${result.error}`;
+        }
+        const columns = result.columns || [];
+        const rows = result.rows || [];
+        const content = [
+          `Rows returned: ${rows.length}`,
+          columns.join(" | "),
+          ...rows.map(row => row.map(value => value === null ? "NULL" : String(value)).join(" | "))
+        ];
+        if (check) {
+          content.push("", result.passed
+            ? "✓ Query passed: the required columns and qualifying employee rows are correct."
+            : `✗ Query did not match the expected output. Required columns: EMPID, EMPNAME, BASIC, NETPAY. Expected ${result.expectedRows} qualifying employee rows.`);
+        }
+        return content.join("\n");
+      }
+
+      async function runSqlQuery(check) {
+        if (isGitHubPages) {
+          showOutput("SQL execution is not available on GitHub Pages. Run `node code-server.js` from this folder and use http://127.0.0.1:8787/code.html to execute queries.", true);
+          setDatabaseTab("output");
+          return;
+        }
+        const button = document.getElementById(check ? "submitCode" : "compileButton");
+        const previousLabel = button.textContent;
+        button.disabled = true;
+        button.textContent = "Running...";
+        output.hidden = false;
+        output.classList.remove("visible");
+        try {
+          const response = await fetch("/api/query", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query: codeInput.value, check })
+          });
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error || `Query request failed (${response.status}).`);
+          lastQueryResult = result;
+          showOutput(formatSqlResult(result, check), !result.ok || (check && !result.passed));
+          setDatabaseTab(check ? "tests" : "output");
+        } catch (error) {
+          lastQueryResult = null;
+          showOutput(`Could not run the local SQL query. Start the practice server with "start-code-server.bat".\n${error.message}`, true);
+          setDatabaseTab("output");
+        } finally {
+          button.disabled = false;
+          button.textContent = previousLabel;
+        }
+      }
+
+      function expectedValue(position) {
+        if (!Number.isInteger(position) || position < 1) return null;
+        let value = position;
+        let result = "";
+        const digits = "012345689";
+        while (value > 0) {
+          result = digits[value % 9] + result;
+          value = Math.floor(value / 9);
+        }
+        return result;
+      }
+
+      async function runJava(mode) {
+        if (isGitHubPages) {
+          showOutput("Java compilation is not available on GitHub Pages. Run `node code-server.js` from this folder and use http://127.0.0.1:8787/code.html to compile Java.", true);
+          return;
+        }
+        const custom = document.getElementById("customInputToggle").checked;
+        const customText = document.getElementById("customValue").value.trim();
+        if (custom && (!/^[1-9]\d*$/.test(customText) || Number(customText) > 2147483647)) {
+          showOutput("Enter a whole-number K between 1 and 2,147,483,647 in Custom Input.", true);
+          return;
+        }
+        const inputs = custom ? [Number(customText)] : [7, 17];
+
+        const button = document.getElementById(mode === "submit" ? "submitCode" : "compileButton");
+        const previousLabel = button.textContent;
+        button.disabled = true;
+        button.textContent = "Running...";
+        output.classList.remove("visible");
+        try {
+          const response = await fetch("/api/compile", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ source: codeInput.value, inputs })
+          });
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error || `Compiler request failed (${response.status}).`);
+          if (!result.compiled) {
+            showOutput(`Compilation failed:\n${result.stderr || result.stdout || "javac returned an error without details."}`, true);
+            return;
+          }
+          const lines = [
+            "Compilation successful — Java 21",
+            ...result.tests.map(test => {
+              const expected = expectedValue(test.input);
+              const passed = !test.error && test.stdout.trim() === expected;
+              return `K = ${test.input} | Expected: ${expected} | Actual: ${test.stdout.trim() || "(no output)"} | ${test.error ? "RUNTIME ERROR" : passed ? "PASS" : "FAIL"}${test.error ? `\n${test.error}` : ""}`;
+            })
+          ];
+          if (result.stderr) lines.push(`Warnings:\n${result.stderr}`);
+          showOutput(lines.join("\n"), result.tests.some(test => test.error || test.stdout.trim() !== expectedValue(test.input)));
+        } catch (error) {
+          showOutput(`Could not connect to the local Java compiler. Start it with "node code-server.js", then open http://127.0.0.1:8787/code.html.\n${error.message}`, true);
+        } finally {
+          button.disabled = false;
+          button.textContent = previousLabel;
+        }
+      }
+
+      function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainder = seconds % 60;
+        return `${String(minutes).padStart(2, "0")}:${String(remainder).padStart(2, "0")}`;
+      }
+
+      codeInput.value = templates.java;
+      setCodingMode(sectionSelect.value);
+      renderLines();
+      codeInput.addEventListener("input", () => {
+        renderLines();
+        if (isFrontend) frontendCode[activeWebLanguage] = codeInput.value;
+      });
+      codeInput.addEventListener("scroll", () => {
+        lineNumbers.scrollTop = codeInput.scrollTop;
+      });
+      codeInput.addEventListener("keydown", event => {
+        if (event.key === "Tab") {
+          event.preventDefault();
+          const start = codeInput.selectionStart;
+          const end = codeInput.selectionEnd;
+          codeInput.setRangeText("    ", start, end, "end");
+          renderLines();
+        }
+      });
+      document.getElementById("languageSelect").addEventListener("change", event => {
+        const language = event.target.value;
+        codeInput.value = templates[language];
+        document.getElementById("compilerVersion").textContent = "Compiler: Java 21";
+        output.classList.remove("visible");
+        renderLines();
+      });
+      webLanguageTabs.addEventListener("click", event => {
+        const tab = event.target.closest("[data-language]");
+        if (!tab) return;
+        setFrontendLanguage(tab.dataset.language);
+      });
+      webLanguageTabs.addEventListener("keydown", event => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        const languages = ["html", "css", "javascript"];
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const next = (languages.indexOf(activeWebLanguage) + direction + languages.length) % languages.length;
+        setFrontendLanguage(languages[next]);
+        document.querySelector(`[data-language="${languages[next]}"]`).focus();
+      });
+      sectionSelect.addEventListener("change", event => setCodingMode(event.target.value));
+      databaseResultTabs.addEventListener("click", event => {
+        const tab = event.target.closest("[data-db-tab]");
+        if (tab) setDatabaseTab(tab.dataset.dbTab);
+      });
+      document.getElementById("schemaZoomIn").addEventListener("click", () => {
+        schemaZoom = Math.min(1.5, schemaZoom + 0.1);
+        document.getElementById("schemaDiagram").style.zoom = String(schemaZoom);
+      });
+      document.getElementById("schemaZoomOut").addEventListener("click", () => {
+        schemaZoom = Math.max(0.7, schemaZoom - 0.1);
+        document.getElementById("schemaDiagram").style.zoom = String(schemaZoom);
+      });
+      document.getElementById("schemaZoomReset").addEventListener("click", () => {
+        schemaZoom = 1;
+        document.getElementById("schemaDiagram").style.zoom = "1";
+      });
+      document.getElementById("resetCode").addEventListener("click", () => {
+        if (isDatabase) {
+          codeInput.value = templates.sql;
+          lastQueryResult = null;
+        } else if (isFrontend) {
+          frontendCode = { ...frontendTemplates };
+          codeInput.value = frontendCode[activeWebLanguage];
+          renderWebPreview();
+        } else {
+          const language = document.getElementById("languageSelect").value;
+          codeInput.value = templates[language];
+        }
+        output.classList.remove("visible");
+        renderLines();
+        showToast("Starter code restored.");
+      });
+      document.getElementById("compileButton").addEventListener("click", () => {
+        if (isDatabase) {
+          runSqlQuery(false);
+          return;
+        }
+        if (isFrontend) {
+          frontendCode[activeWebLanguage] = codeInput.value;
+          renderWebPreview();
+          output.classList.remove("visible");
+          showToast("Preview updated.");
+          return;
+        }
+        runJava("compile");
+      });
+      document.getElementById("submitCode").addEventListener("click", () => {
+        if (isDatabase) {
+          runSqlQuery(true);
+          return;
+        }
+        if (isFrontend) {
+          frontendCode[activeWebLanguage] = codeInput.value;
+          renderWebPreview();
+          showOutput("Front-end code is running in the preview. This practice page does not submit code to a server.", false);
+          return;
+        }
+        runJava("submit");
+      });
+      document.getElementById("helpButton").addEventListener("click", () => {
+        showToast(isDatabase
+          ? "SQL runs locally against the read-only sample database."
+          : isFrontend
+            ? "HTML, CSS and JavaScript run in the isolated preview. Use Compile and Test to refresh it."
+            : "Java code compiles and runs on this computer. Keep the local code server open while practicing.");
+      });
+      document.getElementById("editorInfo").addEventListener("click", () => {
+        showToast(isDatabase
+          ? "Use Query, View Schema, Output and Test Cases to work with the employee sample database."
+          : isFrontend
+            ? "Edit HTML, CSS and JavaScript in their tabs, then refresh the isolated preview."
+            : "Reset the starter code or use Tab to indent.");
+      });
+      document.getElementById("customInputToggle").addEventListener("change", event => {
+        const customValue = document.getElementById("customValue");
+        customValue.hidden = !event.target.checked;
+        if (event.target.checked) customValue.focus();
+      });
+      document.getElementById("revisitButton").addEventListener("click", event => {
+        const button = event.currentTarget;
+        const active = button.getAttribute("aria-pressed") === "true";
+        button.setAttribute("aria-pressed", String(!active));
+        button.querySelector("span").textContent = active ? "Revisit Later" : "Marked to Revisit";
+      });
+      document.getElementById("nextQuestion").addEventListener("click", () => showToast("This coding practice currently contains one question."));
+      document.getElementById("nextSection").addEventListener("click", () => {
+        const nextSection = {
+          backend: "database",
+          database: "frontend",
+          frontend: "database"
+        };
+        sectionSelect.value = nextSection[sectionSelect.value];
+        setCodingMode(sectionSelect.value);
+      });
+      document.getElementById("finishButton").addEventListener("click", event => {
+        window.clearInterval(timerInterval);
+        event.currentTarget.disabled = true;
+        event.currentTarget.textContent = "Practice Finished";
+        showToast("Practice finished. Your code remains in the editor until you leave this page.");
+      });
+      document.getElementById("formatCode").addEventListener("click", () => {
+        const cursor = codeInput.selectionStart;
+        const lineStart = codeInput.value.lastIndexOf("\n", cursor - 1) + 1;
+        codeInput.setRangeText("    ", lineStart, lineStart, "end");
+        renderLines();
+      });
+      document.getElementById("toggleTheme").addEventListener("click", () => {
+        const dark = codeInput.dataset.theme !== "dark";
+        codeInput.dataset.theme = dark ? "dark" : "light";
+        codeInput.style.background = dark ? "#20272d" : "#fff";
+        codeInput.style.color = dark ? "#f3f4f6" : "#252f3b";
+        lineNumbers.style.background = dark ? "#252d35" : "#fbfcfd";
+        lineNumbers.style.color = dark ? "#a8c2d1" : "#538096";
+      });
+      document.getElementById("fullscreenButton").addEventListener("click", async () => {
+        try {
+          if (document.fullscreenElement) await document.exitFullscreen();
+          else await document.documentElement.requestFullscreen();
+        } catch (error) {
+          showToast(`Could not change full-screen mode: ${error.message}`);
+        }
+      });
+      timerInterval = window.setInterval(() => {
+        if (remaining > 0) remaining -= 1;
+        document.getElementById("timer").textContent = formatTime(remaining);
+        if (remaining === 0) {
+          window.clearInterval(timerInterval);
+          showToast("Practice time is up. This local page does not automatically submit code.");
+        }
+      }, 1000);
+    })();
+  </script>
+</body>
+</html>

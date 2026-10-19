@@ -1,0 +1,1105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#092b5b">
+  <meta name="description" content="Independent timed aptitude and technical Accenture practice mock.">
+  <title>Accenture Practice Mock</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #27272a;
+      background: #f1f3f6;
+      --dark: #252a2f;
+      --navy: #092b5b;
+      --accent: #1554b5;
+      --line: #d7dde5;
+      --muted: #657184;
+      --green: #15803d;
+      --red: #b91c1c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body { min-width: 320px; min-height: 100vh; margin: 0; background: #f1f3f6; }
+    body.welcome-screen .assessment-header { display: none; }
+    body.welcome-screen main { width: 100%; min-height: 100vh; padding: 0; }
+    body.exit-landing .assessment-header { display: block; }
+    body.exit-landing main { width: 100%; min-height: calc(100vh - 110px); padding: 0 24px; }
+    body.exit-landing .welcome { min-height: calc(100vh - 190px); }
+    .assessment-header { color: #fff; background: var(--dark); }
+    .header-notice {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 24px;
+      background: #252a2f;
+      color: #e6e9ee;
+      font-size: 11px;
+    }
+    .header-notice span:nth-child(2) { font-weight: 600; text-align: center; }
+    .header-notice span:last-child { color: #c7ced8; text-align: right; }
+    .mini-brand { color: #fff; font-size: 15px; font-weight: 700; letter-spacing: -.2px; }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 18px;
+      min-height: 76px;
+      padding: 10px max(24px, calc((100% - 1440px) / 2));
+      background: var(--navy);
+    }
+    .brand {
+      position: relative;
+      color: #fff;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .brand-mark {
+      position: absolute;
+      top: -15px;
+      left: 41%;
+      color: #a100ff;
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .assessment-context {
+      display: grid;
+      gap: 3px;
+      flex: 1 1 430px;
+      min-width: 0;
+      margin-right: 0;
+      padding-left: 16px;
+      border-left: 1px solid rgb(255 255 255 / 25%);
+    }
+    .assessment-context strong { font-size: 12px; font-weight: 600; }
+    .course-status { display: flex; align-items: center; gap: 8px; min-width: 0; color: #d2dcef; font-size: 11px; }
+    .course-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .course-divider { flex: 0 0 auto; color: #b9c8dc; }
+    .saved-status { display: flex; flex: 0 0 auto; align-items: center; gap: 6px; color: #b9c8dc; white-space: nowrap; }
+    .saved-status .cloud { font-size: 15px; line-height: 1; }
+    .assessment-controls {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: #e6edf8;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .assessment-controls[hidden] { display: none; }
+    .assessment-controls .timer { min-width: 78px; padding: 5px 7px; }
+    .icon-button {
+      display: inline-grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      border: 1px solid rgb(255 255 255 / 28%);
+      border-radius: 4px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      font-size: 17px;
+    }
+    .icon-button:hover { background: rgb(255 255 255 / 12%); }
+    .assessment-controls .icon-button { width: 34px; height: 34px; }
+    .settings-icon { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+    .bookmark-icon { width: 15px; height: 17px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
+    .revisit-button { display: inline-flex; align-items: center; gap: 6px; }
+    .site-navigation {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .site-navigation a {
+      padding: 7px 10px;
+      border: 1px solid rgb(255 255 255 / 22%);
+      border-radius: 3px;
+      color: #e5e7eb;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .site-navigation a:hover,
+    .site-navigation a[aria-current="page"] {
+      border-color: #87939a;
+      background: #26313a;
+      color: #fff;
+    }
+
+    main { width: min(100%, 1480px); margin: 0 auto; padding: 22px 24px 40px; }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #1554b5;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0; font-size: clamp(25px, 5vw, 34px); }
+    .intro { margin: 8px 0 22px; color: var(--muted); line-height: 1.6; }
+    .test-card,
+    .question-card,
+    .result-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 4px 16px rgb(0 0 0 / 5%);
+    }
+    .welcome {
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .welcome h2 { margin: 0 0 12px; font-size: 21px; }
+    .feature-list { display: grid; gap: 12px; margin: 20px 0; padding: 0; list-style: none; }
+    .feature-list li { display: flex; gap: 10px; align-items: flex-start; color: #3f4543; line-height: 1.45; }
+    .feature-icon { flex: 0 0 24px; color: #1554b5; font-weight: 700; }
+    .notice { margin: 20px 0; padding: 12px 14px; border-left: 3px solid #8b5cf6; background: #f5f3ff; color: #4c4561; font-size: 13px; line-height: 1.55; }
+    button { font: inherit; }
+    .primary-button,
+    .secondary-button,
+    .question-jump {
+      border: 1px solid #454d53;
+      border-radius: 4px;
+      background: #29323a;
+      color: #fff;
+      cursor: pointer;
+    }
+    .primary-button { padding: 11px 18px; font-weight: 700; }
+    .primary-button:hover,
+    .secondary-button:hover { background: #454d53; }
+    .primary-button:focus-visible,
+    .secondary-button:focus-visible,
+    .question-jump:focus-visible,
+    .answer-option:focus-within { outline: 3px solid #2563eb; outline-offset: 2px; }
+    .test-view[hidden],
+    .result-view[hidden],
+    .welcome-view[hidden] { display: none; }
+
+    .finish-button {
+      padding: 8px 14px;
+      border: 1px solid rgb(255 255 255 / 55%);
+      border-radius: 3px;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .finish-button:hover { background: rgb(255 255 255 / 12%); }
+    .exit-button { border-color: #f4b8b8; color: #fff; }
+    .exit-button:hover { background: rgb(185 28 28 / 35%); }
+    .progress-copy { font-size: 13px; font-weight: 700; }
+    .timer {
+      min-width: 76px;
+      padding: 7px 10px;
+      border: 1px solid rgb(255 255 255 / 35%);
+      border-radius: 4px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      text-align: center;
+    }
+    .timer.low { border-color: #f87171; background: #7f1d1d; }
+    .progress-track { height: 5px; margin-bottom: 18px; overflow: hidden; border-radius: 5px; background: #d9dddb; }
+    .progress-fill { width: 0; height: 100%; background: #1554b5; transition: width .2s ease; }
+    .test-navigation {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 54px;
+      margin: 0 -24px 18px;
+      padding: 8px 24px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .test-navigation::after {
+      content: attr(data-attempted);
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      border-top: 0;
+      border-radius: 0 0 12px 12px;
+      background: #fff;
+      color: #586579;
+      font-size: 11px;
+      transform: translateX(-50%);
+    }
+    .section-select {
+      width: min(286px, calc(100vw - 105px));
+      min-height: 40px;
+      padding: 7px 14px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      background: #fff;
+      color: #303a48;
+      font: inherit;
+      font-size: 16px;
+    }
+    .instruction-button { width: 45px; height: 40px; color: #34445a; border-color: var(--line); }
+    .instruction-button:hover { background: #eef3fa; }
+    .instruction-icon { width: 18px; height: 18px; fill: #52657d; }
+    .navigation-spacer { display: none; }
+    .test-navigation .control-group { align-items: center; }
+    .question-pager {
+      position: absolute;
+      left: 50%;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transform: translateX(-50%);
+    }
+    .question-map {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+      overflow-x: auto;
+      margin: 0;
+      padding: 0 4px;
+      border: 0;
+      background: transparent;
+    }
+    .map-page-button { min-width: 30px; padding: 5px 8px; }
+    .question-jump { flex: 0 0 34px; width: 34px; height: 34px; border-color: #d1d7df; background: #fff; color: #354153; }
+    .question-jump.answered { border-color: #8ca9d5; background: #e8f0fc; color: #173e78; }
+    .question-jump.flagged { box-shadow: inset 0 -3px #e08b21; }
+    .question-jump.current { border-color: #1554b5; background: #1554b5; color: #fff; }
+    .map-legend { display: none; }
+    .question-layout {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      min-height: min(64vh, 540px);
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .question-panel::before,
+    .answer-panel::before {
+      position: absolute;
+      z-index: 0;
+      top: -30%;
+      left: -35%;
+      width: 180%;
+      height: 160%;
+      color: rgb(45 76 116 / 24%);
+      content: attr(data-watermark);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      line-height: 90px;
+      pointer-events: none;
+      transform: rotate(-27deg);
+      white-space: pre;
+      word-spacing: 10px;
+    }
+    .question-layout.watermark-hidden .question-panel::before,
+    .question-layout.watermark-hidden .answer-panel::before { display: none; }
+    .question-panel,
+    .answer-panel {
+      position: relative;
+      z-index: 1;
+      min-width: 0;
+      overflow: hidden;
+      padding: clamp(20px, 3vw, 36px);
+    }
+    .question-panel > *,
+    .answer-panel > * { position: relative; z-index: 1; }
+    .question-panel { border-right: 1px solid var(--line); }
+    .panel-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 28px;
+      color: #24364e;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .question-meta { display: grid; gap: 14px; color: #26364d; font-size: 13px; font-weight: 700; }
+    .question-text { margin: 22px 0; font-size: 16px; line-height: 1.65; }
+    .question-data {
+      margin: 18px 0;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: #f8f9fb;
+      white-space: pre-line;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.7;
+    }
+    .question-data.code {
+      overflow-x: auto;
+      background: #20272d;
+      color: #f3f4f6;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      tab-size: 2;
+    }
+    .answers { display: grid; gap: 10px; margin: 20px 0 0; padding: 0; border: 0; }
+    .answer-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      min-height: 48px;
+      padding: 14px 15px;
+      border: 1px solid #d3d7d5;
+      border-radius: 5px;
+      background: rgb(255 255 255 / 78%);
+      cursor: pointer;
+      line-height: 1.45;
+    }
+    .answer-option:hover { border-color: #7fa2d7; background: #f7faff; }
+    .answer-option:has(input:checked) { border-color: #1554b5; background: #eef4ff; }
+    .answer-option input { flex: 0 0 auto; margin: 3px 0 0; accent-color: #1554b5; }
+    .question-controls { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .control-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .secondary-button { padding: 9px 13px; }
+    .secondary-button.light { border-color: #aeb5b2; background: #fff; color: #303633; }
+    .secondary-button.light:hover { background: #f2f3f2; }
+    .secondary-button.flagged { border-color: #c2410c; background: #fff7ed; color: #9a3412; }
+    .answer-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #24364e; font-size: 13px; font-weight: 700; }
+    .clear-button { display: inline-flex; align-items: center; gap: 7px; padding: 4px 0; border: 0; background: transparent; color: #536174; cursor: pointer; font-size: 12px; }
+    .eraser-icon { width: 17px; height: 17px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+    .question-grid-icon { width: 17px; height: 17px; fill: currentColor; }
+    .clear-button:hover { color: #1554b5; }
+    .testing .assessment-header { position: sticky; top: 0; z-index: 5; box-shadow: 0 2px 7px rgb(0 0 0 / 12%); }
+    .testing .header-notice { min-height: 34px; }
+    .testing .site-navigation { display: none; }
+    .testing .brand-row { flex-wrap: nowrap; }
+    .testing main { padding-bottom: 62px; }
+    .progress-track { display: none; }
+    .palette-toggle { color: #34445a; border-color: var(--line); }
+    .palette-toggle:hover { background: #eef3fa; }
+    .instruction-dialog {
+      width: min(460px, calc(100% - 32px));
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: #26364d;
+      line-height: 1.55;
+    }
+    .instruction-dialog::backdrop { background: rgb(14 26 43 / 45%); }
+    .instruction-dialog h2 { margin-top: 0; font-size: 19px; }
+    .instruction-dialog li { margin: 8px 0; }
+    .candidate-form { display: grid; gap: 14px; }
+    .candidate-form h2 { margin-bottom: 0; }
+    .candidate-form p { margin: 0; color: #59677a; font-size: 14px; }
+    .candidate-field { display: grid; gap: 6px; color: #26364d; font-size: 13px; font-weight: 700; }
+    .candidate-field input { width: 100%; min-height: 40px; padding: 9px 10px; border: 1px solid #aeb8c5; border-radius: 4px; color: #26364d; font-size: 14px; }
+    .candidate-field input:focus { border-color: #1554b5; outline: 2px solid rgb(37 99 235 / 22%); }
+    .candidate-error { min-height: 18px; color: #a12c2c !important; font-size: 12px !important; }
+    .setting-option { display: flex; align-items: center; gap: 9px; margin: 16px 0; font-size: 14px; }
+    .setting-option input { accent-color: #1554b5; }
+    .dialog-actions { display: flex; justify-content: flex-end; margin-top: 18px; }
+    .question-map.expanded {
+      position: absolute;
+      z-index: 4;
+      top: calc(100% + 8px);
+      right: 24px;
+      display: grid;
+      grid-template-columns: repeat(7, 34px);
+      max-width: min(340px, calc(100vw - 32px));
+      max-height: 260px;
+      overflow: auto;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 8px 24px rgb(22 37 57 / 18%);
+    }
+    .exam-edge-button {
+      position: fixed;
+      z-index: 3;
+      top: 56%;
+      display: grid;
+      width: 38px;
+      height: 42px;
+      place-items: center;
+      border: 0;
+      border-radius: 4px;
+      background: #1554b5;
+      color: #fff;
+      cursor: pointer;
+      font-size: 24px;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 16%);
+    }
+    .exam-edge-button:hover:not(:disabled) { background: #0b408f; }
+    .exam-edge-button:disabled { cursor: not-allowed; opacity: .45; }
+    .exam-edge-button.previous { left: 8px; }
+    .exam-edge-button.next { right: 8px; }
+    .Accentre-footer {
+      position: fixed;
+      z-index: 6;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      display: none;
+      min-height: 44px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 24px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+      color: #647187;
+      font-size: 11px;
+    }
+    .Accentre-footer .connection { color: #168c69; font-weight: 700; }
+    .testing .Accentre-footer { display: flex; }
+    .welcome-intro { margin-bottom: 22px; }
+    .result-card { padding: clamp(20px, 5vw, 34px); }
+    .score-panel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 22px 0; }
+    .score-stat { padding: 13px; border-radius: 5px; background: #f3f4f3; text-align: center; }
+    .score-stat strong { display: block; font-size: 24px; }
+    .score-stat span { color: var(--muted); font-size: 12px; }
+    .review-list { display: grid; gap: 12px; margin: 22px 0; }
+    .review-item { padding: 14px; border: 1px solid var(--line); border-radius: 5px; }
+    .review-item.correct { border-left: 4px solid #16a34a; }
+    .review-item.incorrect { border-left: 4px solid #dc2626; }
+    .review-item h3 { margin: 0 0 8px; font-size: 15px; }
+    .review-item p { margin: 5px 0; color: #525a57; font-size: 13px; line-height: 1.5; }
+    .review-item .answer-key { color: #166534; }
+    .review-item .answer-wrong { color: #991b1b; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 760px) {
+      main { padding: 18px 12px 30px; }
+      .header-notice { grid-template-columns: 1fr 2fr 1fr; padding-inline: 12px; }
+      .brand-row { justify-content: flex-start; padding: 10px 12px; }
+      .assessment-context { flex-basis: 250px; padding-left: 10px; }
+      .site-navigation { width: 100%; justify-content: flex-start; }
+      .testing .brand-row { flex-wrap: wrap; gap: 8px; }
+      .testing .assessment-context { padding-left: 10px; }
+      .exam-edge-button { position: absolute; top: 56%; width: 32px; height: 38px; }
+      .exam-edge-button.previous { left: 4px; }
+      .exam-edge-button.next { right: 4px; }
+      .Accentre-footer { flex-wrap: wrap; padding-inline: 12px; }
+      .question-map.expanded { right: 10px; }
+      .test-navigation { flex-wrap: wrap; gap: 8px; margin-inline: -12px; padding-inline: 12px; }
+      .section-select { width: min(286px, calc(100vw - 105px)); }
+      .question-pager { position: static; order: 3; margin: 0 auto; transform: none; }
+      .question-layout { grid-template-columns: 1fr; }
+      .question-panel { border-right: 0; border-bottom: 1px solid var(--line); }
+      .question-panel, .answer-panel { padding: 20px; }
+      .question-panel { min-height: 220px; }
+      .testing main { padding-top: 18px; }
+    }
+    @media (max-width: 480px) {
+      .header-notice { grid-template-columns: 1fr 2fr; justify-content: center; text-align: center; }
+      .header-notice span:last-child { display: none; }
+      .assessment-context { flex: 1 1 160px; }
+      .site-navigation { gap: 5px; }
+      .site-navigation a { padding: 6px 8px; font-size: 11px; }
+      .assessment-controls { gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+      .assessment-controls > span:first-child { display: none; }
+      .assessment-controls .timer { min-width: 68px; padding: 5px; }
+      .finish-button { padding: 7px 8px; }
+      .test-navigation .control-group { width: 100%; justify-content: space-between; }
+      .test-navigation { justify-content: center; }
+      .question-pager { order: 3; max-width: 100%; }
+      .question-text { margin: 18px 0; font-size: 15px; }
+      .score-panel { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body class="welcome-screen">
+  <header class="assessment-header">
+    <div class="header-notice">
+      <span class="mini-brand">Accenture</span>
+      <span>Independent practice — not monitored or recorded.</span>
+    </div>
+    <div class="brand-row">
+      <a class="brand" href="mock-test.html" aria-label="Accenture practice mock home">Accenture<span class="brand-mark" aria-hidden="true">&gt;</span></a>
+      <div class="assessment-context">
+        <strong id="candidateNameDisplay">Candidate Name</strong>
+        <strong id="candidateRegistrationDisplay">Candidate Registration</strong>
+        <div class="course-status">
+          <span class="course-title">Campus Hiring - Technical 2026 - New Construction</span>
+          <span class="course-divider" aria-hidden="true">/</span>
+          <span class="saved-status"><span class="cloud" aria-hidden="true">☁</span><span>Saved: 0 seconds ago</span></span>
+        </div>
+      </div>
+      <div class="assessment-controls" id="assessmentControls" hidden>
+        <span>◷ Assessment Time</span>
+        <span class="timer" id="timer" aria-live="off">45:00</span>
+        <button class="icon-button" id="fullscreenButton" type="button" aria-label="Enter full screen" title="Full screen">⛶</button>
+        <button class="icon-button" id="settingsButton" type="button" aria-label="Settings" title="Settings">
+          <svg class="settings-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/>
+            <path d="m19.4 15 .1.1a1.7 1.7 0 0 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.2a1.7 1.7 0 0 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 0 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 0 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 0 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V4a1.7 1.7 0 0 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 0 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.2a1.7 1.7 0 0 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2.9Z"/>
+          </svg>
+        </button>
+        <button class="finish-button" id="submitButton" type="button">Finish Assessment</button>
+        <button class="finish-button exit-button" id="exitTestButton" type="button">Exit Test</button>
+      </div>
+      <nav class="site-navigation" aria-label="Game navigation">
+        <a href="game.html">Arrow Games</a>
+        <a href="bubble.html">Bubble Game</a>
+        <a href="door-key.html">Door-Key Game</a>
+        <a href="mock-test.html" aria-current="page">MCQ</a>
+        <a href="code.html">Code</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="welcome-view welcome" id="welcomeView">
+      <div>
+        <p class="eyebrow">Timed MCQ practice</p>
+        <h1>Accenture Practice MCQ</h1>
+        <p class="intro">Enter your name and registration number before starting. They will appear in the practice header and question watermark.</p>
+      <button class="primary-button" id="startButton" type="button">Start Test</button>
+      </div>
+    </section>
+
+    <section class="test-view" id="testView" hidden aria-label="Mock test">
+      <div class="test-navigation" id="testNavigation">
+        <span class="sr-only progress-copy" id="progressCopy">Question 1</span>
+        <label class="sr-only" for="sectionSelect">Jump to question section</label>
+        <select class="section-select" id="sectionSelect"></select>
+        <button class="icon-button instruction-button" id="instructionToggle" type="button" aria-label="Accenture practice instructions" title="Accenture practice instructions">
+          <svg class="instruction-icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.5"/><path d="M10 9v5" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.8"/><circle cx="10" cy="6.2" r="1" fill="#fff"/></svg>
+        </button>
+        <span class="navigation-spacer"></span>
+        <div class="question-pager">
+          <button class="secondary-button light map-page-button" id="mapPreviousButton" type="button" aria-label="Previous group of questions">‹</button>
+          <nav class="question-map" id="questionMap" aria-label="Jump to question"></nav>
+          <button class="secondary-button light map-page-button" id="mapNextButton" type="button" aria-label="Next group of questions">›</button>
+          <button class="icon-button palette-toggle" id="paletteToggle" type="button" aria-label="Show all questions" aria-expanded="false" title="Show all questions">
+            <svg class="question-grid-icon" viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="2" width="7" height="7" rx="1"/><rect x="11" y="2" width="7" height="7" rx="1"/><rect x="2" y="11" width="7" height="7" rx="1"/><rect x="11" y="11" width="7" height="7" rx="1"/></svg>
+          </button>
+        </div>
+        <div class="control-group">
+          <button class="secondary-button light" id="previousButton" type="button">Previous</button>
+          <button class="secondary-button" id="nextButton" type="button">Next</button>
+        </div>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Questions answered" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" id="progressTrack">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <article class="question-layout" id="questionLayout" aria-labelledby="questionText">
+        <button class="exam-edge-button previous" id="edgePreviousButton" type="button" aria-label="Previous question">‹</button>
+        <button class="exam-edge-button next" id="edgeNextButton" type="button" aria-label="Next question">›</button>
+        <section class="question-panel" id="questionPanel">
+          <div class="panel-heading">
+            <span id="questionNumber">Question 1</span>
+            <button class="secondary-button light revisit-button" id="flagButton" type="button">
+              <svg class="bookmark-icon" viewBox="0 0 16 20" aria-hidden="true"><path d="M3 2.5h10v15l-5-3.2-5 3.2z"/></svg>
+              <span id="flagButtonText">Revisit Later</span>
+            </button>
+          </div>
+          <div class="question-meta"><span id="sectionLabel"></span></div>
+          <h2 class="question-text" id="questionText"></h2>
+          <div class="question-data" id="questionData" hidden></div>
+        </section>
+        <section class="answer-panel" id="answerPanel" aria-label="Answer choices">
+          <div class="answer-heading">
+            <span>Select an option</span>
+            <button class="clear-button" id="clearButton" type="button">
+              <svg class="eraser-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m7.2 3.2 9.6 9.6a1.8 1.8 0 0 1 0 2.5l-1.5 1.5H7.5l-4.3-4.3a1.8 1.8 0 0 1 0-2.5l6-6a1.8 1.8 0 0 1 2.5 0Z"/><path d="m6.1 7.9 6 6"/></svg>
+              Clear Response
+            </button>
+          </div>
+          <fieldset class="answers" id="answers">
+            <legend class="sr-only">Choose one answer</legend>
+          </fieldset>
+        </section>
+      </article>
+    </section>
+    <dialog class="instruction-dialog" id="candidateDialog" aria-labelledby="candidateDialogTitle">
+      <form class="candidate-form" id="candidateForm" novalidate>
+        <h2 id="candidateDialogTitle">Candidate details</h2>
+        <p>Your name and registration number will be shown in the test header and watermark on this page.</p>
+        <label class="candidate-field" for="candidateNameInput">
+          Name
+          <input id="candidateNameInput" name="candidateName" type="text" autocomplete="name" minlength="2" maxlength="80" required>
+        </label>
+        <label class="candidate-field" for="candidateRegistrationInput">
+          Registration number
+          <input id="candidateRegistrationInput" name="registrationNumber" type="text" autocomplete="off" minlength="1" maxlength="40" required>
+        </label>
+        <p class="candidate-error" id="candidateError" aria-live="polite"></p>
+        <div class="dialog-actions">
+          <button class="secondary-button light" id="cancelCandidateButton" type="button">Cancel</button>
+          <button class="primary-button" type="submit">Begin Test</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog class="instruction-dialog" id="instructionDialog">
+      <form method="dialog">
+        <h2>Accenture practice instructions</h2>
+        <p>This independent practice mock is not an official assessment and does not use proctoring.</p>
+        <ul>
+          <li>Choose one option to save your answer.</li>
+          <li>Use the question numbers or Previous and Next to move around.</li>
+          <li>Flag questions to revisit, or clear a response if you change your mind.</li>
+          <li>The timer submits the mock automatically when it reaches zero.</li>
+        </ul>
+        <button class="secondary-button" type="submit">Close</button>
+      </form>
+    </dialog>
+    <dialog class="instruction-dialog" id="settingsDialog">
+      <form method="dialog">
+        <h2>Settings</h2>
+        <p>Practice display settings</p>
+        <label class="setting-option"><input type="checkbox" id="watermarkToggle" checked> Show registration number watermark</label>
+        <div class="dialog-actions">
+          <button class="secondary-button" type="submit">Close</button>
+        </div>
+      </form>
+    </dialog>
+    <footer class="Accentre-footer" id="AccentreFooter">
+      <span class="connection">●</span>
+      <span>Independent Accenture practice · Not monitored or recorded</span>
+      <span id="footerQuestion">Question 1</span>
+    </footer>
+
+    <section class="result-view result-card" id="resultView" hidden aria-labelledby="resultTitle">
+      <p class="eyebrow">Mock complete</p>
+      <h2 id="resultTitle">Your results</h2>
+      <div class="score-panel" id="scorePanel"></div>
+      <div class="review-list" id="reviewList"></div>
+      <button class="primary-button" id="retryButton" type="button">Try again</button>
+    </section>
+    <p class="sr-only" id="liveAnnouncement" aria-live="polite"></p>
+  </main>
+  <script>
+    (() => {
+      "use strict";
+
+      const QUESTIONS = [
+        { section: "Security", text: "Consider that an enterprise wants to limit pod-to-pod communication in Kubernetes to reduce the impact of a potential attacker. Which built-in feature should be used in this case? Select the correct answer from the given choices.", options: ["A. Replica sets", "B. Network policies", "C. Storage volumes", "D. Service accounts"], answer: 1, explanation: "Network policies specify which pods may communicate with each other." },
+        { section: "Technical MCQ", text: "Assume that a JavaBean class called \"Person\" has been created to store various details pertaining to an individual, such as their name, gender, age, etc. This class has a no-argument constructor and is marked as Serializable. Another JavaBean class called \"Student\" is created. It inherits the \"Person\" class and implements the getters and setters for the properties specified in it. Based on this information, what changes must be applied to the \"Student\" class to ensure that it supports serialization of its objects? Analyze the given choices and select the correct answer.", options: ["A. No changes are required", "B. It must implement the 'Serializable' interface", "C. It must implement the 'Externalizable' interface", "D. It must include a no-argument constructor that must be marked with the transient modifier"], answer: 0, explanation: "Serializable is inherited from Person, so Student objects are serializable as well, assuming their fields can be serialized." },
+        { section: "Technical MCQ", text: "Assume that you are working on a project that uses OpenJS to debug a Node.js application. The application is a simple web server that listens on port 8080. You are trying to debug a bug that is causing the application to crash. You have tried to debug the bug using the console.log() function, but the logs are not being displayed in the browser. Which code change will most likely fix the bug? Select the correct answer from the given choices.", options: ["A. Add the debugger statement to the line of code that is causing the bug.", "B. Add the debug module to the application.", "C. Use the node --inspect command to start the application in debugging mode.", "D. Use the chrome://inspect page to connect to the application in debugging mode."], answer: 2, explanation: "Starting Node.js with --inspect enables a browser developer-tools debugger to attach to the process." },
+        { section: "Technical MCQ", text: "Assume that you are an e-commerce website owner who sells gadgets and you want to display a list of the gadgets you sell on your website. The gadgets you sell are Phones, Laptops, Tablets, and Palmtops. How will you define the list of gadgets in JavaScript using an array? How will you update the list to replace 'Tablet' with 'Headphone'? Analyze the given choices and select the option with the correct set of answers.", data: "<div id=\"gadgets\"></div>\n\\u003cscript>\n    //line1\n    document.getElementById(\"gadgets\").innerHTML = gadget;\n\\u003c/script>", code: true, options: ["Option 1: a) const gadget = [\"phone\", \"laptop\", \"tablet\", \"palmtop\"]; b) gadget[2] = \"headphone\";", "Option 2: a) array gadget = {\"phone\", \"laptop\", \"tablet\", \"palmtop\"}; b) gadget[3] = \"headphone\";", "Option 3: a) const gadget = new array [\"phone\", \"laptop\", \"tablet\", \"palmtop\"]; b) gadget[\"tablet\"] = \"headphone\";"], answer: 0, explanation: "Option 1 uses a JavaScript array literal and index 2 to replace the third item. The question states that the remaining option is not visible." },
+        { section: "Networking", text: "Assume a company wants direct connections between small independent services without routing data through an intermediary node. Which approach supports this requirement? Select the correct answer from the given choices.", options: ["A. Point-to-point connectors with central routing", "B. Hub-and-spoke systems managed by a central hub", "C. Middleware layers relying on message brokers", "D. Microservices using WebSocket or HTTP protocols"], answer: 3, explanation: "Services can connect directly using HTTP or WebSocket without routing through a broker." },
+        { section: "Security", text: "Assume a large enterprise observes that sensitive records are gradually being extracted through legitimate application APIs using valid service accounts. The traffic volume, request patterns, and endpoints used all fall within normal operational thresholds, making traditional alerting ineffective. Blocking access can disrupt business-critical integrations. The organization needs a control to differentiate between legitimate usage and subtle abuse over time. What approach should be implemented in this scenario? Select the correct answer from the given choices.", options: ["A. Restrict API access using predefined network allowlists across all integrations", "B. Apply context-aware behavioral modeling with dynamic anomaly scoring mechanisms", "C. Enforce stronger encryption controls on all API payload transmissions consistently", "D. Increase logging granularity and perform periodic audit reviews of all API activity"], answer: 1, explanation: "Behavioral models with contextual anomaly scoring can identify gradual misuse that fixed thresholds miss." },
+        { section: "Technical MCQ", text: "Assume that Tim is working on a website where a list of social media icons needs to be created with different colors for each icon. This will make the website more interactive. Which resource should Tim use to fulfill the given task? Select the correct answer from the given choices.", options: ["A. Loops", "B. if-else", "C. Variables", "D. Switch case"], answer: 3, explanation: "A switch case can select a distinct color for each known icon." },
+        { section: "Technical MCQ", text: "Assume that you are building a website that displays a gallery of images. You want to use HTML to create the layout for the gallery. Each image in the gallery should be displayed with a caption beneath it. The caption should be centered and have a black background. Which HTML tags should you use to create the layout for the gallery as described? Select the correct answer from the given choices.", options: ["A. <img>, <p>, and <div>", "B. <img>, <caption>, and <table>", "C. <figure>, <img>, and <figcaption>", "D. <div>, <img>, and <p>"], answer: 2, explanation: "figure, img, and figcaption provide semantic image-and-caption markup; centering and background color are applied with CSS." },
+        { section: "Technical MCQ", text: "In the STUDENT_COURSE table, consider that a student with STUD_NO = 1 is enrolled in multiple courses. The course name for C2 (COURSE_NO for \"Computer Networks\") needs to be updated. What anomaly risk arises if the change is not made consistently across all related rows? Select the correct option from the given choices.", options: ["A. Insertion anomaly due to missing key values", "B. Deletion anomaly, causing unintended data loss", "C. Update anomaly, leading to inconsistent records", "D. Redundancy anomaly, duplicating identical values"], answer: 2, explanation: "Updating only some repeated course records creates an update anomaly and inconsistent data." },
+        { section: "Technical MCQ", text: "Assume a developer designs an API that hides system internals while still providing the data needed for a request. What principle does this reflect? Select the correct answer from the given choices.", options: ["A. Full server exposure to clients", "B. Automatic release of all stored data", "C. Unrestricted access to hidden functions", "D. Controlled sharing of specific information"], answer: 3, explanation: "The API exposes only the information needed by the client and hides internal implementation details." },
+        { section: "Technical MCQ", text: "In a relation with a composite key (StudentID, CourseID), StudentName depends only on StudentID. What does this scenario indicate? Select the correct answer from the given choices.", options: ["A. The relation already satisfies 2NF fully", "B. A partial dependency exists and violates 2NF", "C. The relation is in 3NF without changes", "D. The relation directly satisfies 4NF rules"], answer: 1, explanation: "StudentName depends on only part of the composite key, which is a partial dependency violating 2NF." },
+        { section: "Cloud Computing", text: "During a Jenkins pipeline run, consider that the build artifacts are saved to cloud storage before the tests are executed. Why is this step important for the workflow? Select the correct answer from the given choices.", options: ["A. It lets teams skip testing and go directly to deployment", "B. It ensures test stages use the same compiled outputs", "C. It replaces the need for version control systems", "D. It automatically merges the branches before running builds"], answer: 1, explanation: "Using the same saved build artifacts ensures the test stage verifies the outputs produced by the build." },
+        { section: "Technical MCQ", text: "Assume that an insurance company has a Policy class defined in a Java program in the package 'Insurance'. Only subclasses in other packages may access the calculatePremium() method. Which option is correct to implement this requirement? Analyze the given choices and select the correct answer.", data: "A.\npackage insurance;\npublic class Policy {\n    public void calculatePremium() { }\n}\n\nB.\npackage insurance;\npublic class Policy {\n    protected void calculatePremium() { }\n}\n\nC.\npackage insurance;\npublic class Policy {\n    void calculatePremium() { }\n}\n\nD.\npackage insurance;\npublic class Policy {\n    private void calculatePremium() { }\n}", code: true, options: ["A", "B", "C", "D"], answer: 1, explanation: "protected permits access from subclasses in other packages. The supplied correct answer is B." },
+        { section: "Security", text: "Assume a security system checks packet headers such as IP address, port number, and protocol before deciding about access. What type of firewall is this? Select the correct answer from the given choices.", options: ["A. Stateful inspection firewall", "B. Packet filtering firewall", "C. Proxy firewall", "D. Next-generation firewall"], answer: 1, explanation: "Packet-filtering firewalls use header fields such as IP addresses, ports, and protocols." },
+        { section: "Security", text: "Assume that a messaging system uses symmetric encryption to secure communication between two parties. The encryption and decryption processes are as follows: 1. Each party encrypts messages before sending them using a shared secret key. 2. Messages are decrypted by the receiving party using the same shared secret key. If an attacker can send a specially crafted message to one party and analyze the resulting encrypted message, which of the following techniques is most likely to compromise the secret key?", options: ["A. Analyzing patterns in intercepted encrypted messages.", "B. Comparing the crafted message's encrypted output with previous encrypted messages.", "C. Performing a brute-force attack on intercepted messages.", "D. Matching message lengths to guess the content."], answer: 1, explanation: "Comparing ciphertexts for chosen inputs describes a chosen-plaintext analysis scenario; it does not by itself guarantee that a sound cipher's key can be recovered." },
+        { section: "Security", text: "What is the main purpose of network segmentation in security? Analyze the given choices and select the correct answer.", options: ["A. Increasing bandwidth", "B. Improving signal strength", "C. Limiting the spread of attacks", "D. Reducing latency"], answer: 2, explanation: "Segmentation limits lateral movement and helps contain attacks." },
+        { section: "Cloud Computing", text: "Consider that a company is implementing a cloud-based solution and wants to ensure that only authorized devices can access its cloud resources. What IAM strategy should the company employ in this case? Select the correct option from the given choices.", options: ["A. Role-based access control", "B. Attribute-based access control", "C. Device authentication", "D. Network access control"], answer: 2, explanation: "Device authentication verifies the identity of devices requesting cloud access." },
+        { section: "Security", text: "Assume that an organization implements WPA2 for securing its Wi-Fi network, which includes multiple routers configured with encryption protocols. Despite these measures, the network experiences intermittent security breaches, especially during peak hours when many devices are connected. Upon investigation, it is found that some connected devices are vulnerable to DNS-cache poisoning, leading to compromised connections. Which specific approach, if implemented alongside WPA2, can most effectively mitigate these breaches without altering the current encryption settings, while ensuring secure connections across all devices? Analyze the given choices and select the correct answer.", options: ["A. Regularly updating the routers firmware to patch known vulnerabilities and implementing MAC address filtering to restrict device access.", "B. Deploying a WIPS to continuously monitor the network for unauthorized access points and automatically disconnect compromised devices.", "C. Integrating a VPN across the network to encrypt all traffic between connected devices and external servers, preventing man-in-the-middle attacks.", "D. Configuring firewalls on each router to filter out traffic from suspicious IP addresses and preventing DNS queries from being redirected."], answer: 2, explanation: "Among the listed choices, a VPN encrypts traffic across untrusted paths; DNS-cache poisoning still requires appropriate DNS protections and endpoint remediation." },
+        { section: "Cloud Computing", text: "Consider that a startup specializing in digital marketing has moved its customer relationship management (CRM) system to a cloud-based platform for better scalability. However, concerns have emerged about potential data breaches and unauthorized access to client information. As a network security consultant, you are tasked with assessing the authentication methods to secure client data in the cloud. Which authentication method is best suited for securing client data in a cloud-based CRM system? Select the correct option from the given choices.", options: ["A. OAuth", "B. LDAP", "C. SAML", "D. OpenID Connect"], answer: 3, explanation: "OpenID Connect provides an authentication layer commonly used for cloud identity and sign-in." },
+        { section: "Networking", text: "Assume a network administrator decides to replace the default network functionality of the hypervisor with third-party software to enhance control-plane independence and scalability. During the configuration, the administrator must ensure that the communication between virtual networks does not involve routing frames and restricts management traffic while enforcing specific rules for inter-tenant communication. What configuration strategy should be adopted to achieve these requirements? Analyze the given choices and select the correct answer.", options: ["A. Implement a virtual switch with encapsulation protocols that support layer 3 networks and segregate traffic using third-party virtual networking tools.", "B. Configure VLANs on physical switches to handle the segregation of tenant environments and apply policies directly on physical routers to manage inter-tenant communication.", "C. Utilize an overlay network protocol on the hypervisor to encapsulate virtual network traffic, ensuring isolation while managing routing through service access points.", "D. Set up multiple virtual networks with embedded encryption protocols, relying on the hypervisor's native networking functionalities for traffic management and enforcing tenant separation through firewall rules."], answer: 0, explanation: "The virtual switch with encapsulation and third-party network virtualization matches the stated overlay and tenant-segregation requirements most closely." },
+        { section: "Security", text: "Consider that a cloud-based software platform exposes APIs for integration with third-party applications and services. The firm wants to ensure the security of its APIs to prevent unauthorized access and data breaches. Which security mechanism should it implement to authenticate and authorize API requests? Select the correct option from the given choices.", options: ["A. OAuth", "B. No API Security", "C. Static API Keys", "D. Open Access"], answer: 0, explanation: "OAuth is an authorization framework for granting scoped API access." },
+        { section: "Security", text: "Assume a home user notices that streaming slows with certain services, but after turning on a VPN, the speeds remain stable. Which VPN advantage explains this behavior? Select the correct option from the given choices.", options: ["A. Privacy Protection", "B. Bypass Geo-Restrictions", "C. Prevents Data Throttling", "D. Access Works Resources Remotely"], answer: 2, explanation: "A VPN may conceal traffic type from an ISP and help avoid throttling based on the identified service, though it cannot guarantee speed." },
+        { section: "Security", text: "What feature makes VPNs suitable for protecting privacy as well as browsing safely on open Wi-Fi networks? Select the correct option from the given choices.", options: ["A. Redirecting traffic without full confidentiality", "B. Blocking intrusions but exposing user identity", "C. Hiding user identity and encrypting connections", "D. Monitoring activity without encryption support"], answer: 2, explanation: "VPNs encrypt the connection across the local network and can mask the user's public IP address." },
+        { section: "Fundamentals", text: "Assume that applications running on different machines need a service that allows them to exchange data as if they were directly linked. Which feature of the transport layer fulfills this need? Select the correct option from the given choices.", options: ["A. A routing mechanism that forwards packets through network devices", "B. A logical channel that connects application processes end to end", "C. A hardware address that uniquely identifies network interfaces", "D. A congestion policy that regulates the load at the network layer"], answer: 1, explanation: "The transport layer provides logical end-to-end communication between application processes." },
+        { section: "Fundamentals", text: "In a computer network, which resource can function as a node for data communication? Select the correct answer from the given choices.", options: ["A. Network cable", "B. Wireless link", "C. Router", "D. Firewall device"], answer: 2, explanation: "A router is a network device that forwards data between networks and acts as a communication node." },
+        { section: "Pseudocode", text: "What will be the output of the following pseudo code for a = 4, b = 5, c = 6?", data: "Integer funn(Integer a, Integer b, Integer c)\n    if((c+b)<(b-c) && 6>a)\n        if((c+a+b)<(5+b+9))\n            c=(a+3)+b\n        End if\n        c=a+a\n    End if\n    b=(c+10)+a\n    return a+b+c", code: true, options: ["A. 28", "B. 32", "C. 30", "D. 39"], answer: 2, explanation: "The outer condition is false. Then b becomes (6 + 10) + 4 = 20, so the return value is 4 + 20 + 6 = 30." },
+        { section: "Pseudocode", text: "What will be the output of the following pseudo code?", data: "Integer p,q,r\nSet p=1, q=8, r=9\nq=(11+9)&q\np=q+q\nPrint p+q+r", code: true, options: ["A. 6", "B. 9", "C. 13", "D. 24"], answer: 1, explanation: "20 & 8 is 0, so p and q both become 0; the output is r = 9." },
+        { section: "Pseudocode", text: "What will be the output of the following pseudo code for a = 6, b = 5, c = 7?", data: "Integer funn(Integer a, Integer b, Integer c)\n    for(each c from 4 to 5)\n        b=b+c\n    End for\n    return a+b", code: true, options: ["A. 14", "B. 20", "C. 23", "D. 30"], answer: 1, explanation: "The loop adds 4 and 5 to b, making b = 14; a + b = 20." },
+        { section: "Pseudocode", text: "What will be the output of the following pseudo code?", data: "Integer j\nInteger arr[4] = {2, 2, 1, 2}\n\nif((3+7)<arr[2])\n    arr[2]=(arr[2]+arr[2]+arr[0])+arr[0]\nEnd if\n\narr[2]=(2^9)^arr[2]\n\nif(arr[0]<arr[1])\n    arr[3]=arr[2]+arr[2]\nEnd if\n\nPrint arr[0]+arr[2]", code: true, options: ["A. 10", "B. 14", "C. 12", "D. 18"], answer: 2, explanation: "The first condition is false. Taking ^ as bitwise XOR, (2 XOR 9) XOR 1 = 10; the result is 2 + 10 = 12." },
+        { section: "Pseudocode", text: "What will be the output of the following pseudo code for a = 3, b = 2, c = 6?", data: "Integer funn(Integer a, Integer b, Integer c)\n    if((5-c-a)<(a+b))\n        if((a+c)+(c+b)>(a+c+b))\n            if((6+a)<(c+6))\n                a=5+a\n            Else\n                b=(c+11)+b\n            End if\n        End if\n    End if\n    return a+b+c", code: true, options: ["A. 36", "B. 20", "C. -3", "D. 16"], answer: 3, explanation: "All conditions are true, so a becomes 8 and the function returns 8 + 2 + 6 = 16." },
+        { section: "Pseudocode", text: "What will be the output of the following pseudo code?", data: "Integer a,b,c\nSet a=4, b=4, c=4\nb=a+a\nif((a+b)>(c-a) && a<b)\n    if((b+c)<c)\n        c=(c+b)+c\n    End if\n    c=(c+a)+b\nEnd if\nPrint a+b+c", code: true, options: ["A. 25", "B. 28", "C. 29", "D. 46"], answer: 1, explanation: "b becomes 8; the inner condition is false, then c becomes 4 + 4 + 8 = 16. The output is 28." },
+        { section: "Technical MCQ", text: "Assume that you have a table named \"customers\" with the columns: \"customerID\", \"name\", \"city\", and \"email\". Which SQL query effectively retrieves all the details of those customers who are located in 'New York' from the table? Analyze the given choices and select the correct option.", options: ["A. SELECT * FROM customers WHERE city = 'New York';", "B. SELECT * FROM TABLE customers WHERE city = 'NY';", "C. SELECT * FROM customers WHERE city LIKE '%New York%';", "D. SELECT * FROM customers WHERE city = 'NYC';"], answer: 0, explanation: "The first query returns every column for rows whose city exactly equals 'New York'." },
+        { section: "Pseudocode", text: "What will be the output of the following pseudo code?", data: "Integer j\nInteger arr[2][2] = {{0, 1}, {4, 1}}\n\nif((3&arr[1][1])<(arr[1][0]+3))\n    arr[1][0]=(4+1)+arr[0][1]\n    arr[1][0]=2+arr[1][0]\nEnd if\n\narr[0][0]=(arr[0][0]^1)+arr[0][0]\nPrint arr[1][0]+arr[0][0]/arr[0][0]", code: true, options: ["A. 7", "B. 12", "C. 9", "D. 19"], answer: 2, explanation: "The condition is true, arr[1][0] becomes 8 and arr[0][0] becomes 1; the result is 8 + 1/1 = 9." },
+        { section: "Pseudocode", text: "What will be the output of the following pseudo code for a = 9, b = 5, c = 4?", data: "Integer funn(Integer a, Integer b, Integer c)\n    a=(b+6)+b\n    if((a+b)<c || (b+7)<a)\n        b=(a+b)+a\n        if((b+a)<(c-b))\n            a=(1+1)+c\n        End if\n    End if\n    return a+b+c", code: true, options: ["A. 50", "B. 57", "C. 59", "D. 70"], answer: 1, explanation: "a becomes 16; the outer condition is true and b becomes 37. The inner condition is false, so the return value is 57." },
+        { section: "Fundamentals", text: "In DMA transfers, assume the controller can use different modes depending on how it shares the system bus with the CPU. Which mode interrupts the CPU briefly during each transfer cycle? Select the correct option from the given choices.", options: ["A) Burst mode, where the controller keeps the bus until all data is sent", "B) Cycle-stealing mode, where the controller holds the bus for a short cycle", "C) Transparent mode, where transfers occur only when the CPU is free", "D) Programmed I/O, where the CPU manages all transfers directly"], answer: 1, explanation: "Cycle stealing briefly takes bus cycles from the CPU for individual data transfers." },
+        { section: "MS Excel", text: "The following image shows a certain formula applied to the data in an MS-Excel sheet. What is possibly incorrect in the formula in cell C11?", options: ["A) VLOOKUP can search only text values", "B) Format of the lookup value does not match with the data format in the table", "C) VLOOKUP works only on sorted data", "D) None of the given options"], answer: 1, explanation: "A mismatch between text and numeric formats can prevent a lookup match. The referenced image was not included, so the intended issue cannot be confirmed from the prompt alone." },
+        { section: "Operating Systems", text: "Assume a programmer designs an application that requires mouse input to capture user activity. Since the program cannot directly manage the hardware, the operating system must depend on a specific component to enable communication between the mouse and the system. Which component provides this functionality? Select the correct answer from the given choices.", options: ["A) The kernel scheduler assigns mouse events directly to applications", "B) The memory manager handles mouse data as part of RAM allocation", "C) The device driver acts as the bridge between the OS and the mouse", "D) The file system interprets mouse signals as structured input records"], answer: 2, explanation: "A device driver enables the operating system to communicate with the mouse hardware." },
+        { section: "Operating Systems", text: "Consider that a developer runs a large program where many routines are rarely called. Which memory management approach reduces wasted space by bringing routines into memory only when required? Select the correct answer from the given choices.", options: ["A) Static loading", "B) Dynamic loading", "C) Swapping Loading", "D) Paging"], answer: 1, explanation: "Dynamic loading brings a routine into memory only when it is needed." },
+        { section: "MS Word", text: "John is writing a report and needs to insert today's date without typing it manually. Which shortcut in MS Word allows him to do this?", options: ["A) Alt + Shift + D", "B) Ctrl + Shift + T", "C) Ctrl + Alt + D", "D) Shift + F5"], answer: 0, explanation: "Alt + Shift + D inserts the current date in Microsoft Word." },
+        { section: "MS PowerPoint", text: "To display different content on the same slide based on user interaction during a PowerPoint slideshow, which feature should you use?", options: ["A) Section Zoom", "B) Morph Transition", "C) Triggers", "D) Slide Master"], answer: 2, explanation: "PowerPoint triggers start an animation or action in response to user interaction." },
+        { section: "Operating Systems", text: "Consider that a university server allows many students to log in from different terminals and access shared academic resources simultaneously without affecting each other's sessions. Which operating system property supports this functionality? Select the correct option from the given choices.", options: ["A) Multiuser Support", "B) Memory Paging", "C) Device Buffering", "D) Process Swapping"], answer: 0, explanation: "Multiuser support allows simultaneous independent user sessions." }
+      ];
+      const TEST_SECONDS = 45 * 60;
+      const answers = Array(QUESTIONS.length).fill(null);
+      const flagged = new Set();
+      const welcomeView = document.getElementById("welcomeView");
+      const testView = document.getElementById("testView");
+      const resultView = document.getElementById("resultView");
+      const assessmentControls = document.getElementById("assessmentControls");
+      const timer = document.getElementById("timer");
+      const progressCopy = document.getElementById("progressCopy");
+      const progressTrack = document.getElementById("progressTrack");
+      const progressFill = document.getElementById("progressFill");
+      const questionMap = document.getElementById("questionMap");
+      const sectionSelect = document.getElementById("sectionSelect");
+      const testNavigation = document.getElementById("testNavigation");
+      const mapPreviousButton = document.getElementById("mapPreviousButton");
+      const mapNextButton = document.getElementById("mapNextButton");
+      const paletteToggle = document.getElementById("paletteToggle");
+      const fullscreenButton = document.getElementById("fullscreenButton");
+      const settingsButton = document.getElementById("settingsButton");
+      const edgePreviousButton = document.getElementById("edgePreviousButton");
+      const edgeNextButton = document.getElementById("edgeNextButton");
+      const footerQuestion = document.getElementById("footerQuestion");
+      const status = document.getElementById("liveAnnouncement");
+      progressTrack.setAttribute("aria-valuemax", String(QUESTIONS.length));
+      progressCopy.textContent = `Question 1 of ${QUESTIONS.length}`;
+      footerQuestion.textContent = `Question 1 of ${QUESTIONS.length}`;
+      testNavigation.dataset.attempted = `Attempted: 0 / ${QUESTIONS.length}`;
+      let currentIndex = 0;
+      let secondsLeft = TEST_SECONDS;
+      let timerId = null;
+      let submitted = false;
+      let candidateName = "";
+      let candidateRegistration = "";
+
+      ["MS Excel", "MS Word", "MS PowerPoint", "Fundamentals", "Networking", "Operating Systems", "Cloud Computing", "Security", "Technical MCQ", "Pseudocode"]
+        .filter(section => QUESTIONS.some(question => question.section === section))
+        .forEach((section, index) => {
+        const option = document.createElement("option");
+        option.value = section;
+        option.textContent = `${index + 1}. ${section}`;
+        sectionSelect.append(option);
+      });
+
+      function formatTime(totalSeconds) {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+      }
+
+      function renderMap() {
+        questionMap.replaceChildren();
+        const expanded = paletteToggle.getAttribute("aria-expanded") === "true";
+        const firstVisible = expanded ? 0 : Math.floor(currentIndex / 7) * 7;
+        const lastVisible = expanded ? QUESTIONS.length : Math.min(firstVisible + 7, QUESTIONS.length);
+        for (let index = firstVisible; index < lastVisible; index += 1) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "question-jump";
+          button.textContent = String(index + 1);
+          button.setAttribute("aria-label", `Go to question ${index + 1}${answers[index] !== null ? ", answered" : ", unanswered"}${flagged.has(index) ? ", flagged" : ""}`);
+          if (answers[index] !== null) button.classList.add("answered");
+          if (flagged.has(index)) button.classList.add("flagged");
+          if (index === currentIndex) {
+            button.classList.add("current");
+            button.setAttribute("aria-current", "step");
+          }
+          button.addEventListener("click", () => {
+            saveAnswer();
+            currentIndex = index;
+            paletteToggle.setAttribute("aria-expanded", "false");
+            paletteToggle.setAttribute("aria-label", "Show all questions");
+            renderQuestion();
+          });
+          questionMap.append(button);
+        }
+        mapPreviousButton.hidden = expanded;
+        mapNextButton.hidden = expanded;
+        questionMap.classList.toggle("expanded", expanded);
+      }
+
+      function saveAnswer() {
+        const selected = document.querySelector('input[name="answer"]:checked');
+        answers[currentIndex] = selected ? Number(selected.value) : null;
+      }
+
+      function renderQuestion() {
+        const question = QUESTIONS[currentIndex];
+        document.getElementById("sectionLabel").textContent = question.section;
+        document.getElementById("questionNumber").textContent = `Question ${currentIndex + 1}`;
+        sectionSelect.value = question.section;
+        document.getElementById("questionText").textContent = question.prompt
+          ? `${question.prompt} ${question.text}`
+          : question.text;
+        const data = document.getElementById("questionData");
+        data.hidden = !question.data;
+        data.classList.toggle("code", Boolean(question.code));
+        data.textContent = question.data || "";
+        const answersFieldset = document.getElementById("answers");
+        answersFieldset.replaceChildren(answersFieldset.querySelector("legend"));
+        question.options.forEach((option, index) => {
+          const label = document.createElement("label");
+          label.className = "answer-option";
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = "answer";
+          input.value = String(index);
+          input.checked = answers[currentIndex] === index;
+          input.addEventListener("change", () => {
+            answers[currentIndex] = index;
+            status.textContent = `Answer saved for question ${currentIndex + 1}.`;
+            renderMap();
+            updateProgress();
+          });
+          const text = document.createElement("span");
+          text.textContent = option;
+          label.append(input, text);
+          answersFieldset.append(label);
+        });
+        progressCopy.textContent = `Question ${currentIndex + 1} of ${QUESTIONS.length}`;
+        footerQuestion.textContent = `Question ${currentIndex + 1} of ${QUESTIONS.length}`;
+        document.getElementById("previousButton").disabled = currentIndex === 0;
+        document.getElementById("nextButton").disabled = currentIndex === QUESTIONS.length - 1;
+        edgePreviousButton.disabled = currentIndex === 0;
+        edgeNextButton.disabled = currentIndex === QUESTIONS.length - 1;
+        const flagButton = document.getElementById("flagButton");
+        flagButton.classList.toggle("flagged", flagged.has(currentIndex));
+        document.getElementById("flagButtonText").textContent = flagged.has(currentIndex) ? "Revisit Later ✓" : "Revisit Later";
+        renderMap();
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const answeredCount = answers.filter(answer => answer !== null).length;
+        testNavigation.dataset.attempted = `Attempted: ${answeredCount} / ${QUESTIONS.length}`;
+        progressTrack.setAttribute("aria-valuenow", String(answeredCount));
+        progressFill.style.width = `${answeredCount / QUESTIONS.length * 100}%`;
+      }
+
+      function updateTimer() {
+        timer.textContent = formatTime(secondsLeft);
+        timer.setAttribute("aria-label", `${Math.floor(secondsLeft / 60)} minutes and ${secondsLeft % 60} seconds remaining`);
+        timer.classList.toggle("low", secondsLeft <= 60);
+      }
+
+      function setCandidateIdentity(name, registration) {
+        candidateName = name;
+        candidateRegistration = registration;
+        document.getElementById("candidateNameDisplay").textContent = name;
+        document.getElementById("candidateRegistrationDisplay").textContent = registration;
+        const watermark = Array.from({ length: 8 }, () => `${name}  ·  ${registration}     ${name}  ·  ${registration}`).join("\n");
+        document.getElementById("questionPanel").dataset.watermark = watermark;
+        document.getElementById("answerPanel").dataset.watermark = watermark;
+      }
+
+      function startTest() {
+        document.body.classList.remove("welcome-screen");
+        document.body.classList.remove("exit-landing");
+        document.body.classList.add("testing");
+        assessmentControls.hidden = false;
+        welcomeView.hidden = true;
+        resultView.hidden = true;
+        testView.hidden = false;
+        currentIndex = 0;
+        secondsLeft = TEST_SECONDS;
+        submitted = false;
+        answers.fill(null);
+        flagged.clear();
+        paletteToggle.setAttribute("aria-expanded", "false");
+        paletteToggle.setAttribute("aria-label", "Show all questions");
+        updateTimer();
+        renderQuestion();
+        timerId = window.setInterval(() => {
+          secondsLeft -= 1;
+          updateTimer();
+          if (secondsLeft <= 0) submitTest(true);
+        }, 1000);
+      }
+
+      function exitTest() {
+        if (!window.confirm("Exit the test? Your answers in this attempt will be discarded.")) return;
+        window.clearInterval(timerId);
+        timerId = null;
+        submitted = true;
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(error => {
+            status.textContent = `Could not exit full screen: ${error.message}`;
+          });
+        }
+        document.body.classList.remove("testing");
+        document.body.classList.add("welcome-screen", "exit-landing");
+        assessmentControls.hidden = true;
+        welcomeView.hidden = false;
+        testView.hidden = true;
+        resultView.hidden = true;
+        answers.fill(null);
+        flagged.clear();
+        currentIndex = 0;
+        updateProgress();
+      }
+
+      function submitTest(isTimeout = false) {
+        if (submitted) return;
+        saveAnswer();
+        submitted = true;
+        window.clearInterval(timerId);
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(error => {
+            status.textContent = `Could not exit full screen: ${error.message}`;
+          });
+        }
+        document.body.classList.remove("testing");
+        assessmentControls.hidden = true;
+        testView.hidden = true;
+        resultView.hidden = false;
+        renderResults(isTimeout);
+        resultView.focus?.();
+      }
+
+      function renderResults(isTimeout) {
+        const correct = answers.reduce((score, answer, index) => score + (answer === QUESTIONS[index].answer ? 1 : 0), 0);
+        const answered = answers.filter(answer => answer !== null).length;
+        document.getElementById("resultTitle").textContent = isTimeout ? "Time is up — your results" : "Your results";
+        const scorePanel = document.getElementById("scorePanel");
+        scorePanel.replaceChildren();
+        [
+          [`${correct}/${QUESTIONS.length}`, "Correct answers"],
+          [`${answered}/${QUESTIONS.length}`, "Questions answered"],
+          [formatTime(TEST_SECONDS - secondsLeft), "Time used"]
+        ].forEach(([value, label]) => {
+          const stat = document.createElement("div");
+          stat.className = "score-stat";
+          const strong = document.createElement("strong");
+          strong.textContent = value;
+          const caption = document.createElement("span");
+          caption.textContent = label;
+          stat.append(strong, caption);
+          scorePanel.append(stat);
+        });
+
+        const reviewList = document.getElementById("reviewList");
+        reviewList.replaceChildren();
+        QUESTIONS.forEach((question, index) => {
+          const isCorrect = answers[index] === question.answer;
+          const item = document.createElement("article");
+          item.className = `review-item ${isCorrect ? "correct" : "incorrect"}`;
+          const title = document.createElement("h3");
+          title.textContent = `${index + 1}. ${question.section}: ${question.prompt ? `${question.prompt} ` : ""}${question.text}`;
+          const yourAnswer = document.createElement("p");
+          yourAnswer.textContent = `Your answer: ${answers[index] === null ? "Not answered" : question.options[answers[index]]}`;
+          yourAnswer.className = isCorrect ? "answer-key" : "answer-wrong";
+          const correctAnswer = document.createElement("p");
+          correctAnswer.className = "answer-key";
+          correctAnswer.textContent = `Correct answer: ${question.options[question.answer]}`;
+          const explanation = document.createElement("p");
+          explanation.textContent = question.explanation;
+          item.append(title, yourAnswer, correctAnswer, explanation);
+          reviewList.append(item);
+        });
+      }
+
+      const candidateDialog = document.getElementById("candidateDialog");
+      const candidateForm = document.getElementById("candidateForm");
+      const candidateNameInput = document.getElementById("candidateNameInput");
+      const candidateRegistrationInput = document.getElementById("candidateRegistrationInput");
+      document.getElementById("startButton").addEventListener("click", () => {
+        document.getElementById("candidateError").textContent = "";
+        candidateNameInput.value = candidateName;
+        candidateRegistrationInput.value = candidateRegistration;
+        candidateDialog.showModal();
+        candidateNameInput.focus();
+      });
+      document.getElementById("cancelCandidateButton").addEventListener("click", () => candidateDialog.close());
+      candidateForm.addEventListener("submit", event => {
+        event.preventDefault();
+        const name = candidateNameInput.value.trim();
+        const registration = candidateRegistrationInput.value.trim();
+        const error = document.getElementById("candidateError");
+        candidateNameInput.value = name;
+        candidateRegistrationInput.value = registration;
+        if (name.length < 2 || name.length > 80) {
+          error.textContent = "Enter a name that is between 2 and 80 characters.";
+          candidateNameInput.focus();
+          return;
+        }
+        if (registration.length < 1 || registration.length > 40) {
+          error.textContent = "Enter a registration number between 1 and 40 characters.";
+          candidateRegistrationInput.focus();
+          return;
+        }
+        if (/[\u0000-\u001f\u007f]/.test(name + registration)) {
+          error.textContent = "Please enter a valid name and registration number.";
+          candidateNameInput.focus();
+          return;
+        }
+        error.textContent = "";
+        setCandidateIdentity(name, registration);
+        candidateDialog.close();
+        startTest();
+      });
+      document.getElementById("flagButton").addEventListener("click", () => {
+        if (flagged.has(currentIndex)) flagged.delete(currentIndex);
+        else flagged.add(currentIndex);
+        renderQuestion();
+      });
+      document.getElementById("clearButton").addEventListener("click", () => {
+        answers[currentIndex] = null;
+        renderQuestion();
+        status.textContent = `Response cleared for question ${currentIndex + 1}.`;
+      });
+      sectionSelect.addEventListener("change", () => {
+        saveAnswer();
+        currentIndex = QUESTIONS.findIndex(question => question.section === sectionSelect.value);
+        renderQuestion();
+      });
+      mapPreviousButton.addEventListener("click", () => {
+        currentIndex = Math.max(0, Math.floor(currentIndex / 7) * 7 - 7);
+        renderQuestion();
+      });
+      mapNextButton.addEventListener("click", () => {
+        currentIndex = Math.min(QUESTIONS.length - 1, Math.floor(currentIndex / 7) * 7 + 7);
+        renderQuestion();
+      });
+      document.getElementById("submitButton").addEventListener("click", () => submitTest());
+      document.getElementById("exitTestButton").addEventListener("click", exitTest);
+      document.getElementById("retryButton").addEventListener("click", startTest);
+      function moveQuestion(offset) {
+        saveAnswer();
+        currentIndex = Math.max(0, Math.min(QUESTIONS.length - 1, currentIndex + offset));
+        renderQuestion();
+      }
+      document.getElementById("previousButton").addEventListener("click", () => moveQuestion(-1));
+      document.getElementById("nextButton").addEventListener("click", () => moveQuestion(1));
+      edgePreviousButton.addEventListener("click", () => moveQuestion(-1));
+      edgeNextButton.addEventListener("click", () => moveQuestion(1));
+      paletteToggle.addEventListener("click", () => {
+        const expanded = paletteToggle.getAttribute("aria-expanded") !== "true";
+        paletteToggle.setAttribute("aria-expanded", String(expanded));
+        paletteToggle.setAttribute("aria-label", expanded ? "Hide all questions" : "Show all questions");
+        renderMap();
+      });
+      document.getElementById("instructionToggle").addEventListener("click", () => {
+        document.getElementById("instructionDialog").showModal();
+      });
+      settingsButton.addEventListener("click", () => {
+        document.getElementById("settingsDialog").showModal();
+      });
+      document.getElementById("watermarkToggle").addEventListener("change", event => {
+        document.getElementById("questionLayout").classList.toggle("watermark-hidden", !event.target.checked);
+      });
+      fullscreenButton.addEventListener("click", async () => {
+        try {
+          if (document.fullscreenElement) {
+            await document.exitFullscreen();
+          } else {
+            await document.documentElement.requestFullscreen();
+          }
+        } catch (error) {
+          status.textContent = `Full screen could not be changed: ${error.message}`;
+        }
+      });
+      document.addEventListener("fullscreenchange", () => {
+        const isFullscreen = Boolean(document.fullscreenElement);
+        fullscreenButton.setAttribute("aria-label", isFullscreen ? "Exit full screen" : "Enter full screen");
+        fullscreenButton.title = isFullscreen ? "Exit full screen" : "Full screen";
+      });
+    })();
+  </script>
+</body>
+</html>
