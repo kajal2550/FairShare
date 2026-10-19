@@ -809,8 +809,8 @@ image.addEventListener("mouseleave", () => {
 
       async function runSqlQuery(check) {
         if (isGitHubPages) {
-          showOutput("SQL execution is not available on GitHub Pages. Run `node code-server.js` from this folder and use http://127.0.0.1:8787/code.html to execute queries.", true);
           setDatabaseTab("output");
+          showOutput("SQL execution is not available on GitHub Pages. Run `node code-server.js` from this folder and use http://127.0.0.1:8787/code.html to execute queries.", true);
           return;
         }
         const button = document.getElementById(check ? "submitCode" : "compileButton");
