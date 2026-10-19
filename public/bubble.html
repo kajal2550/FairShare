@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bubble Math — Quick-Fire Math | Accenture Practice | BuildUForward</title>
+  <title>Accenture Bubble Game — Quick-Fire Math</title>
   <meta name="description" content="Practice Accenture Quick-Fire Math (Bubble Math) free — select bubbles lowest to highest value within 14 seconds. 3 practice sets plus unlimited mode.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
@@ -100,31 +100,243 @@ body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-hei
 .tgl-lbl{display:flex;align-items:center;gap:6px;cursor:pointer;}
 footer{font-size:12px;color:#4b5563;text-align:center;padding:20px;margin-top:auto;}
 @media(max-width:640px){.bubble{width:130px;height:130px;}.bubble-txt{font-size:18px;}.navbar{padding:0 10px;}.logo-txt{font-size:13px;}.nav-links{display:flex;gap:6px;}.nav-links a{font-size:11px;}.nav-cta{display:none;}.p0{left:5%;}.p1{right:5%;}.bot-bar{flex-direction:column;align-items:flex-start;}.feedback{margin-left:0;}}
+
+/* Match the shared Accenture practice-game shell used by the other games. */
+:root {
+  color-scheme: light;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #27272a;
+  background: #f2f2ef;
+  --bg: #f2f2ef;
+  --card: #fff;
+  --brd: #cbd0d5;
+  --or: #a100ff;
+  --blue: #26313a;
+  --green: #16a34a;
+  --red: #dc2626;
+  --text: #27272a;
+  --muted: #52525b;
+}
+body {
+  display: block;
+  min-width: 320px;
+  margin: 0;
+  background: #f2f2ef;
+  color: #27272a;
+  background-image: none;
+}
+.assessment-header {
+  min-height: 204px;
+  color: #fff;
+  background: #080b0e;
+}
+.header-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgb(255 255 255 / 5%);
+  background: #11171c;
+  color: #e5e7eb;
+  font-size: 12px;
+  text-align: center;
+}
+.brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  width: min(100%, 1120px);
+  min-height: 150px;
+  margin: 0 auto;
+  padding: 24px;
+}
+.brand {
+  position: relative;
+  display: inline-block;
+  color: #f7f7f7;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(28px, 5vw, 38px);
+  font-weight: 700;
+  letter-spacing: -1.8px;
+  line-height: 1;
+}
+.brand-mark {
+  position: absolute;
+  top: -17px;
+  right: 26px;
+  color: #a100ff;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  transform: rotate(-18deg);
+}
+.site-navigation { display: flex; align-items: center; gap: 8px; }
+.site-navigation a {
+  padding: 8px 12px;
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 8px;
+  color: #e5e7eb;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.site-navigation a:hover,
+.site-navigation a[aria-current="page"] {
+  border-color: #a100ff;
+  background: rgb(161 0 255 / 14%);
+  color: #fff;
+}
+.wrap {
+  width: min(100%, 1080px);
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 18px 24px 32px;
+}
+.bc { display: none; }
+.pg-title {
+  margin: 0 0 8px;
+  color: #27272a;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 700;
+}
+.pg-desc {
+  max-width: 760px;
+  margin: 0 0 18px;
+  color: #52525b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.pg-desc strong { color: #7e22ce !important; }
+.tabs { gap: 8px; margin-bottom: 16px; }
+.tab-pill {
+  padding: 8px 13px;
+  border: 1px solid #cbd0d5;
+  border-radius: 4px;
+  background: #fff;
+  color: #3f3f46;
+  font: inherit;
+  font-size: 13px;
+}
+.tab-pill:hover { border-color: #a100ff; color: #27272a; }
+.tab-pill.active {
+  border-color: #29323a;
+  background: #29323a;
+  color: #fff;
+  box-shadow: none;
+}
+.game-card {
+  margin-bottom: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.inner-arena {
+  min-height: 420px;
+  border: 1px solid #cbd0d5;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: none;
+}
+.inner-arena::before { opacity: .25; }
+.top-hud {
+  border-bottom: 1px solid #d4d4d8;
+  background: #26313a;
+}
+.instr-note { color: #f4f4f5; }
+.q-counter {
+  border-color: #a100ff;
+  background: rgb(161 0 255 / 14%);
+  color: #fff;
+}
+.bubbles-stage { background: #f2f2ef; }
+.bubble {
+  border-color: rgb(39 39 42 / 40%);
+  background: radial-gradient(circle at 35% 28%, #fff 0%, #dbeafe 35%, #93c5fd 75%, #60a5fa 100%);
+  box-shadow: inset 0 0 22px rgb(255 255 255 / 65%), 0 5px 16px rgb(39 39 42 / 18%);
+}
+.bubble::before { background: linear-gradient(180deg, rgb(255 255 255 / 95%) 0%, rgb(255 255 255 / 8%) 100%); }
+.bubble-txt {
+  color: #27272a;
+  font-family: Arial, Helvetica, sans-serif;
+  text-shadow: 0 1px 2px rgb(255 255 255 / 80%);
+}
+.bubble:hover { box-shadow: inset 0 0 28px rgb(255 255 255 / 75%), 0 0 0 3px rgb(161 0 255 / 28%); }
+.bubble.selected {
+  border-color: #a100ff !important;
+  background: radial-gradient(circle at 35% 28%, #fff 0%, #e9d5ff 35%, #c084fc 75%, #a855f7 100%) !important;
+  box-shadow: 0 0 0 3px rgb(161 0 255 / 25%) !important;
+}
+.bubble.b-green {
+  border-color: #16a34a !important;
+  background: radial-gradient(circle at 35% 28%, #fff 0%, #bbf7d0 35%, #4ade80 75%, #16a34a 100%) !important;
+  box-shadow: 0 0 0 3px rgb(22 163 74 / 20%) !important;
+}
+.bubble.b-red {
+  border-color: #dc2626 !important;
+  background: radial-gradient(circle at 35% 28%, #fff 0%, #fecaca 35%, #f87171 75%, #dc2626 100%) !important;
+  box-shadow: 0 0 0 3px rgb(220 38 38 / 20%) !important;
+}
+.bot-txt { color: #3f3f46; }
+.bot-txt strong { color: #7e22ce; }
+.tr-bg { stroke: #cbd0d5; }
+.tr-arc { stroke: #a100ff; }
+.tmr-num { color: #27272a; }
+.feedback { border-radius: 4px; }
+.fb-ok { color: #15803d; }
+.fb-er { color: #b91c1c; }
+.q-pill {
+  border: 1px solid #cbd0d5;
+  border-radius: 4px;
+  background: #fff;
+  color: #3f3f46;
+}
+.q-pill:hover { border-color: #a100ff; color: #27272a; }
+.q-pill.active { border-color: #29323a; background: #29323a; color: #fff; }
+.q-pill.cleared { border-color: #16a34a; background: #dcfce7; color: #15803d; }
+.act-btn {
+  border: 1px solid #454d53;
+  border-radius: 4px;
+  background: #29323a;
+  color: #fff;
+}
+.act-btn:hover { background: #3f4a53; }
+.act-btn.primary { border-color: #29323a; background: #29323a; }
+.act-btn.primary:hover { background: #3f4a53; }
+.toggle-row { color: #3f3f46; }
+footer { color: #52525b; }
+@media (max-width: 620px) {
+  .assessment-header { min-height: 156px; }
+  .header-notice { min-height: 42px; font-size: 10px; }
+  .brand-row { min-height: 114px; padding: 16px; }
+  .site-navigation { gap: 6px; flex-wrap: wrap; }
+  .site-navigation a { padding: 7px 9px; font-size: 12px; }
+  .wrap { padding: 12px 8px 24px; }
+}
   </style>
 </head>
 <body>
 
-<div class="promo">🎯 Accenture Gamified Assessment Prep is LIVE — Practice all games free! →</div>
-
-<nav class="navbar">
-  <a class="logo" href="bubble.html">
-    <div class="logo-sq">B</div>
-    <div class="logo-txt">BuildU<span>Forward</span></div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="game.html">🧭 Arrow Games</a></li>
-    <li><a href="bubble.html" class="active" aria-current="page">🫧 Bubble Game</a></li>
-    <li><a href="door-key.html">🔑 Door-Key Game</a></li>
-  </ul>
-</nav>
+<header class="assessment-header">
+  <div class="header-notice">Accenture Bubble Game · assessment practice replica · no recording is active</div>
+  <div class="brand-row">
+    <div class="brand" aria-label="Accenture">accenture<span class="brand-mark" aria-hidden="true">&gt;</span></div>
+    <nav class="site-navigation" aria-label="Game navigation">
+      <a href="game.html">Arrow Games</a>
+      <a href="bubble.html" aria-current="page">Bubble Game</a>
+      <a href="door-key.html">Door-Key Game</a>
+      <a href="mock-test.html">Mock Test</a>
+    </nav>
+  </div>
+</header>
 
 <div class="wrap">
-  <div class="bc">
-    <a href="game.html">Accenture Gamified Assessment</a>
-    <span style="margin:0 6px">›</span>
-    <span style="color:#ff6b1a">Quick-Fire Math — Bubble Math</span>
-  </div>
-  <h1 class="pg-title">🫧 Quick-Fire Math — Free Practice</h1>
+  <h1 class="pg-title">Quick-Fire Math — Bubble Game</h1>
   <p class="pg-desc">Quick-Fire Math (Bubble Math) tests how fast you compare expression values. Select bubbles from <strong style="color:#38bdf8">LOWEST to HIGHEST</strong> within 14 seconds. All 3 are selected automatically — no need to press submit!</p>
 
   <div class="tabs">
@@ -180,7 +392,7 @@ footer{font-size:12px;color:#4b5563;text-align:center;padding:20px;margin-top:au
   </div>
 </div>
 
-<footer>© 2026 BuildUForward — Accenture Gamified Assessment Practice Suite (Arrow Path · Door Lock · Quick-Fire Math)</footer>
+<footer>Accenture Bubble Game · assessment practice replica</footer>
 
 <script>
 // ============ DATA ============
